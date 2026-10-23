@@ -1,0 +1,11 @@
+/* Палитра «Клубника со сливками». Чтобы поменять цвет на всём сайте, достаточно поменять его здесь. */
+:root {
+  --color-pink: #ffb8cb;
+  --color-cream: #fff3e0;
+  --color-white: #ffffff;
+  --color-beige: #f0e0cc;
+  --color-crimson: #c2456f;
+  --color-text: #52263a;
+
+  --font-main: 'Nunito', system-ui, sans-serif;
+}
