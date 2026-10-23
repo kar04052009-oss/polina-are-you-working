@@ -86,4 +86,5 @@ content/
 - [x] Каркас сайта (React 19 + Vite 8 + TypeScript, Motion, yaml + marked, пустая структура content, страница-заглушка читает реплику из content/dialogues/main.yaml). Локальный просмотр: `npm run dev` → http://127.0.0.1:5173.
 - [x] GitHub: хранилище https://github.com/kar04052009-oss/polina-are-you-working (публичное, ветка main). Сохранения подписаны скрытым адресом GitHub (346877891+kar04052009-oss@users.noreply.github.com), настоящую почту в коммиты не писать.
 - [x] Cloudflare Pages: проект polina-are-you-working, сайт https://polina-are-you-working.pages.dev. Сборка `npm run build`, папка `dist`, ветка main публикуется на основной адрес. Любая другая ветка получает черновую ссылку `<ветка>.polina-are-you-working.pages.dev`. Доступ Cloudflare на GitHub выдан только к этому хранилищу.
-- [ ] Отчёт и чек-лист.
+- [x] Автопубликация и черновые ссылки проверены (пробная ветка `proverka-chernovika`). Встроенный браузер приложения блокирует файлы на новых поддоменах pages.dev, поэтому черновик проверялся напрямую, сам сайт работает.
+- [x] Отчёт и чек-лист отправлены. Ждём проверки Полины.
