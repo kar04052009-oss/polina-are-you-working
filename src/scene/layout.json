@@ -1,0 +1,102 @@
+{
+  "canvas": {
+    "width": 3360,
+    "height": 1600
+  },
+  "main": {
+    "x": 400,
+    "y": 80,
+    "width": 2560,
+    "height": 1440
+  },
+  "dialog": {
+    "x": 400,
+    "y": 1160,
+    "width": 2560,
+    "height": 360
+  },
+  "polina": {
+    "x": 1980,
+    "y": 220,
+    "width": 780,
+    "height": 1300
+  },
+  "desk": {
+    "x": 0,
+    "y": 960,
+    "width": 1940,
+    "height": 200
+  },
+  "items": [
+    {
+      "id": "monitor",
+      "label": "Монитор",
+      "goal": "Портфолио",
+      "kind": "section",
+      "x": 700,
+      "y": 500,
+      "width": 560,
+      "height": 440
+    },
+    {
+      "id": "moodboard",
+      "label": "Мудборд",
+      "goal": "Обо мне",
+      "kind": "section",
+      "x": 1300,
+      "y": 180,
+      "width": 560,
+      "height": 440
+    },
+    {
+      "id": "phone",
+      "label": "Смартфон",
+      "goal": "Контакты",
+      "kind": "section",
+      "x": 1360,
+      "y": 740,
+      "width": 130,
+      "height": 220
+    },
+    {
+      "id": "mug",
+      "label": "Кружка",
+      "goal": "пасхалка",
+      "kind": "easter",
+      "x": 460,
+      "y": 820,
+      "width": 130,
+      "height": 140
+    },
+    {
+      "id": "pencils",
+      "label": "Карандаши",
+      "goal": "пасхалка (или скетчбуки)",
+      "kind": "easter",
+      "x": 1620,
+      "y": 760,
+      "width": 200,
+      "height": 200
+    },
+    {
+      "id": "window",
+      "label": "Окно",
+      "goal": "пасхалка",
+      "kind": "easter",
+      "x": 560,
+      "y": 170,
+      "width": 620,
+      "height": 300
+    },
+    {
+      "id": "plant",
+      "label": "Растение",
+      "goal": "пасхалка",
+      "kind": "easter",
+      "x": 2780,
+      "y": 620,
+      "width": 170,
+      "height": 540
+    }
+  ]
+}

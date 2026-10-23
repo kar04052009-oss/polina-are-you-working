@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="3360" height="1600" viewBox="0 0 3360 1600">
+<path d="M0 0H3360V1600H0Z M400 80V1520H2960V80Z" fill="#7A6A70" fill-opacity="0.18" fill-rule="evenodd"/>
+<rect x="2" y="2" width="3356" height="1596" fill="none" fill-opacity="0" stroke="#7A6A70" stroke-width="4" />
+<text x="24" y="56" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="400" fill="#7A6A70" text-anchor="start">Холст 3360×1600 · серое — запас для широких экранов</text>
+<line x1="1680" y1="0" x2="1680" y2="1600" stroke="#7A6A70" stroke-width="2" stroke-dasharray="12 12"/>
+<line x1="0" y1="800" x2="3360" y2="800" stroke="#7A6A70" stroke-width="2" stroke-dasharray="12 12"/>
+<rect x="400" y="80" width="2560" height="1440" fill="none" fill-opacity="0" stroke="#C2456F" stroke-width="8" />
+<text x="420" y="130" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700" fill="#C2456F" text-anchor="start">Основная зона 2560×1440 — видна всегда · 400, 80</text>
+<rect x="0" y="960" width="1940" height="200" fill="#B89A78" fill-opacity="0.15" stroke="#B89A78" stroke-width="3" stroke-dasharray="24 12"/>
+<text x="420" y="1020" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="400" fill="#B89A78" text-anchor="start">стол (примерно)</text>
+<rect x="1980" y="220" width="780" height="1300" fill="#FFB8CB" fill-opacity="0.35" stroke="#C2456F" stroke-width="5" stroke-dasharray="30 14"/>
+<text x="2370" y="290" font-family="Segoe UI, Arial, sans-serif" font-size="48" font-weight="700" fill="#C2456F" text-anchor="middle">Полина</text>
+<text x="2370" y="335" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="400" fill="#C2456F" text-anchor="middle">1980, 220 · 780×1300</text>
+<text x="2370" y="375" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="400" fill="#C2456F" text-anchor="middle">низ фигуры уходит за диалоговое окно</text>
+<rect x="700" y="500" width="560" height="440" fill="#3F7FBF" fill-opacity="0.22" stroke="#3F7FBF" stroke-width="5" />
+<text x="716" y="544" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700" fill="#3F7FBF" text-anchor="start">Монитор</text>
+<text x="716" y="582" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="400" fill="#3F7FBF" text-anchor="start">→ Портфолио</text>
+<text x="716" y="616" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="400" fill="#3F7FBF" text-anchor="start">700, 500 · 560×440</text>
+<rect x="1300" y="180" width="560" height="440" fill="#3F7FBF" fill-opacity="0.22" stroke="#3F7FBF" stroke-width="5" />
+<text x="1316" y="224" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700" fill="#3F7FBF" text-anchor="start">Мудборд</text>
+<text x="1316" y="262" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="400" fill="#3F7FBF" text-anchor="start">→ Обо мне</text>
+<text x="1316" y="296" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="400" fill="#3F7FBF" text-anchor="start">1300, 180 · 560×440</text>
+<rect x="1360" y="740" width="130" height="220" fill="#3F7FBF" fill-opacity="0.22" stroke="#3F7FBF" stroke-width="5" />
+<text x="1360" y="648" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700" fill="#3F7FBF" text-anchor="start">Смартфон</text>
+<text x="1360" y="686" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="400" fill="#3F7FBF" text-anchor="start">→ Контакты</text>
+<text x="1360" y="720" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="400" fill="#3F7FBF" text-anchor="start">1360, 740 · 130×220</text>
+<rect x="460" y="820" width="130" height="140" fill="#B89A78" fill-opacity="0.22" stroke="#B89A78" stroke-width="4" stroke-dasharray="14 8"/>
+<text x="460" y="728" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700" fill="#B89A78" text-anchor="start">Кружка</text>
+<text x="460" y="766" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="400" fill="#B89A78" text-anchor="start">→ пасхалка</text>
+<text x="460" y="800" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="400" fill="#B89A78" text-anchor="start">460, 820 · 130×140</text>
+<rect x="1620" y="760" width="200" height="200" fill="#B89A78" fill-opacity="0.22" stroke="#B89A78" stroke-width="4" stroke-dasharray="14 8"/>
+<text x="1620" y="668" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700" fill="#B89A78" text-anchor="start">Карандаши</text>
+<text x="1620" y="706" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="400" fill="#B89A78" text-anchor="start">→ пасхалка (или скетчбуки)</text>
+<text x="1620" y="740" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="400" fill="#B89A78" text-anchor="start">1620, 760 · 200×200</text>
+<rect x="560" y="170" width="620" height="300" fill="#B89A78" fill-opacity="0.22" stroke="#B89A78" stroke-width="4" stroke-dasharray="14 8"/>
+<text x="576" y="214" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700" fill="#B89A78" text-anchor="start">Окно</text>
+<text x="576" y="252" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="400" fill="#B89A78" text-anchor="start">→ пасхалка</text>
+<text x="576" y="286" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="400" fill="#B89A78" text-anchor="start">560, 170 · 620×300</text>
+<rect x="2780" y="620" width="170" height="540" fill="#B89A78" fill-opacity="0.22" stroke="#B89A78" stroke-width="4" stroke-dasharray="14 8"/>
+<text x="2780" y="528" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700" fill="#B89A78" text-anchor="start">Растение</text>
+<text x="2780" y="566" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="400" fill="#B89A78" text-anchor="start">→ пасхалка</text>
+<text x="2780" y="600" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="400" fill="#B89A78" text-anchor="start">2780, 620 · 170×540</text>
+<rect x="400" y="1160" width="2560" height="360" fill="#C2456F" fill-opacity="0.16" stroke="#C2456F" stroke-width="6" />
+<text x="1680" y="1320" font-family="Segoe UI, Arial, sans-serif" font-size="44" font-weight="700" fill="#C2456F" text-anchor="middle">Зона диалогового окна — нижняя четверть основной зоны</text>
+<text x="1680" y="1375" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="400" fill="#C2456F" text-anchor="middle">400, 1160 · 2560×360 · кликабельные предметы сюда не ставить</text>
+<text x="3336" y="56" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="400" fill="#7A6A70" text-anchor="end">синие — разделы · бежевые пунктиром — пасхалки</text>
+</svg>
