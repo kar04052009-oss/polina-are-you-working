@@ -14,6 +14,7 @@ export function Room() {
   const [cursor, setCursor] = useState<{ x: number; y: number } | null>(null)
   const { width: W, height: H } = layout.canvas
   const d = layout.dialog
+  const room = layout.room
 
   // Координаты курсора в пикселях холста — чтобы сверять зоны с картинкой.
   const onMove = (e: React.MouseEvent) => {
@@ -22,12 +23,16 @@ export function Room() {
   }
 
   return (
-    <div className="room" onMouseMove={onMove}>
+    <div className="room" onMouseMove={onMove} style={roomImage ? { background: layout.room.edgeColor } : undefined}>
       <div
         className="room__stage"
         style={{ width: W, height: H, transform: `translate(${left}px, ${top}px) scale(${scale})` }}
       >
-        {roomImage ? <img src={roomImage} alt="" width={W} height={H} className="room__bg" /> : <RoomPlaceholder />}
+        {roomImage ? (
+          <img src={roomImage} alt="" className="room__bg" style={{ left: room.x, top: room.y, width: room.width, height: room.height }} />
+        ) : (
+          <RoomPlaceholder />
+        )}
         <Polina />
         <div
           className="room__dialog-placeholder"

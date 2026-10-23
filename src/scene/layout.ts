@@ -15,6 +15,8 @@ export type Item = Rect & {
 export type Layout = {
   canvas: { width: number; height: number }
   main: Rect
+  // Где лежит картинка комнаты на холсте и каким цветом залить края за ней
+  room: Rect & { edgeColor: string }
   dialog: Rect
   polina: Rect
   monitorScreen: Rect

@@ -5,12 +5,14 @@ const beige = '#a07e58'
 const green = '#2e9e7a'
 const crimson = 'var(--color-crimson)'
 
-function Box({ r, color, dash, title, sub }: { r: Rect; color: string; dash?: string; title: string; sub?: string }) {
+function Box({ r, color, dash, title, sub, bottom }: { r: Rect; color: string; dash?: string; title: string; sub?: string; bottom?: boolean }) {
+  // bottom — подпись внизу зоны, когда сверху её закрыла бы соседняя подпись
+  const ty = bottom ? r.y + r.height - 50 : r.y + 40
   return (
     <g>
       <rect {...box(r)} style={{ fill: color, fillOpacity: 0.12, stroke: color, strokeWidth: 5, strokeDasharray: dash }} />
-      <text x={r.x + 12} y={r.y + 40} style={{ fill: color, fontSize: 32, fontWeight: 700 }}>{title}</text>
-      <text x={r.x + 12} y={r.y + 74} style={{ fill: color, fontSize: 24 }}>
+      <text x={r.x + 12} y={ty} style={{ fill: color, fontSize: 32, fontWeight: 700 }}>{title}</text>
+      <text x={r.x + 12} y={ty + 34} style={{ fill: color, fontSize: 24 }}>
         {sub ? `${sub} · ` : ''}
         {r.x}, {r.y} · {r.width}×{r.height}
       </text>
@@ -58,7 +60,7 @@ export function MarkupOverlay() {
       {layout.items.map((it) => (
         <ItemShape key={it.id} it={it} />
       ))}
-      <Box r={layout.monitorScreen} color={green} title="Экран монитора" sub="сюда приближается камера" />
+      <Box r={layout.monitorScreen} color={green} title="Экран монитора" sub="сюда приближается камера" bottom />
       <Box r={layout.dialog} color={crimson} title="Диалоговое окно" />
     </svg>
   )
