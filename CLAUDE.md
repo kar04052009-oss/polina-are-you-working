@@ -83,7 +83,7 @@ content/
 - [x] Установлены Node.js 24 (LTS) и Git 2.55.
 - [x] Папка перенесена в `C:\Users\polin\projects\polina-portfolio`.
 - [x] Палитра выбрана (C), шрифт Nunito поставлен.
-- [x] Каркас сайта (React 19 + Vite 8 + TypeScript, Motion, yaml + marked, пустая структура content, страница-заглушка читает реплику из content/dialogues/main.yaml). Локальный просмотр: `npm run dev` → http://127.0.0.1:5173. Git ещё не включён в папке.
-- [ ] GitHub: Полина входит сама, создаём публичное хранилище, первая отправка кода.
+- [x] Каркас сайта (React 19 + Vite 8 + TypeScript, Motion, yaml + marked, пустая структура content, страница-заглушка читает реплику из content/dialogues/main.yaml). Локальный просмотр: `npm run dev` → http://127.0.0.1:5173.
+- [x] GitHub: хранилище https://github.com/kar04052009-oss/polina-are-you-working (публичное, ветка main). Сохранения подписаны скрытым адресом GitHub (346877891+kar04052009-oss@users.noreply.github.com), настоящую почту в коммиты не писать.
 - [ ] Cloudflare Pages: подключение, адрес polina-are-you-working, проверка автопубликации и черновых ссылок.
 - [ ] Отчёт и чек-лист.
