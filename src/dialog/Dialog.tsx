@@ -2,7 +2,9 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { layout } from '../scene/layout'
 import { DialogBox } from './DialogBox'
 import { demoLines } from './demoLines'
-import { appear, boxStyle, typingSpeed } from './variants'
+
+// Скорость печати: 35 знаков в секунду (выбрано на этапе 3)
+const TYPING_SPEED = 35
 
 // Ведёт диалог: клик, пробел или Enter дописывают реплику, следующий — показывают следующую.
 export function Dialog() {
@@ -39,9 +41,7 @@ export function Dialog() {
       speaker={line.speaker}
       text={line.text}
       choices={line.choices}
-      cps={typingSpeed}
-      variant={boxStyle}
-      appear={appear}
+      cps={TYPING_SPEED}
       skipRef={skipRef}
       // Пока выборы пробные — любой ответ возвращает к началу
       onChoose={() => setIndex(0)}

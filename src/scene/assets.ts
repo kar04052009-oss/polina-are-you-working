@@ -8,9 +8,11 @@ const rooms = import.meta.glob<string>('/content/room/room.{png,jpg,jpeg,webp}',
   import: 'default',
   query: { w: '3960', format: 'webp', quality: '85' },
 })
+// Спрайты тоже сжимаются в WebP; прозрачность сохраняется.
 const sprites = import.meta.glob<string>('/content/characters/polina/*.png', {
   eager: true,
   import: 'default',
+  query: { format: 'webp', quality: '90' },
 })
 
 export const roomImage: string | undefined = Object.values(rooms)[0]

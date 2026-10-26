@@ -10,14 +10,12 @@ type Props = {
   text: string
   choices?: string[]
   cps: number
-  variant: string
-  appear: 'a' | 'b'
   onChoose?: (index: number) => void
   // Сюда окно кладёт функцию «дописать реплику»; true — клик потрачен на это
   skipRef: RefObject<(() => boolean) | null>
 }
 
-export function DialogBox({ box, speaker, text, choices, cps, variant, appear, onChoose, skipRef }: Props) {
+export function DialogBox({ box, speaker, text, choices, cps, onChoose, skipRef }: Props) {
   const { shown, rest, done, skip } = useTypewriter(text, cps)
 
   useEffect(() => {
@@ -30,11 +28,12 @@ export function DialogBox({ box, speaker, text, choices, cps, variant, appear, o
 
   return (
     <motion.div
-      className={`dialog dialog--${variant}`}
+      className="dialog"
       style={{ left: box.x, top: box.y, width: box.width, height: box.height }}
-      initial={appear === 'b' ? { opacity: 0, y: 120 } : { opacity: 0 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: appear === 'b' ? 0.6 : 0.8, delay: 0.4, ease: 'easeOut' }}
+      // Окно мягко проявляется на месте
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }}
     >
       <div className="dialog__name">{speaker}</div>
 

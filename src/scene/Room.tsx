@@ -6,8 +6,6 @@ import { RoomPlaceholder } from './RoomPlaceholder'
 import { Polina } from './Polina'
 import { MarkupOverlay } from './MarkupOverlay'
 import { Dialog } from '../dialog/Dialog'
-import { VariantPanel } from '../dialog/VariantPanel'
-import { showVariantPanel } from '../dialog/variants'
 import './Room.css'
 
 const showMarkup = new URLSearchParams(window.location.search).has('razmetka')
@@ -39,8 +37,6 @@ export function Room() {
         <Dialog />
         {showMarkup && <MarkupOverlay />}
       </div>
-
-      {showVariantPanel && <VariantPanel />}
 
       {showMarkup && (
         <div className="room__readout">
