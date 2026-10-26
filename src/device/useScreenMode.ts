@@ -5,7 +5,12 @@ export type ScreenMode = 'full' | 'rotate' | 'phone'
 // Полный сайт: окно от 1024×600 и горизонтальное.
 // Вертикальный планшет (сенсорный экран, который после поворота подойдёт) → просьба повернуть.
 // Всё остальное → заглушка для телефонов. Мобильную версию позже можно подключить вместо неё.
+// Для проверки на компьютере: ?ekran=telefon, ?ekran=planshet или ?ekran=komnata.
+const forced: Record<string, ScreenMode> = { telefon: 'phone', planshet: 'rotate', komnata: 'full' }
+
 function detect(): ScreenMode {
+  const force = forced[new URLSearchParams(window.location.search).get('ekran') ?? '']
+  if (force) return force
   const w = window.innerWidth
   const h = window.innerHeight
   if (w >= 1024 && h >= 600 && w > h) return 'full'
