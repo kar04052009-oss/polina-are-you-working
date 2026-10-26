@@ -22,6 +22,12 @@
     "width": 2560,
     "height": 360
   },
+  "dialogBox": {
+    "x": 480,
+    "y": 1200,
+    "width": 2400,
+    "height": 290
+  },
   "polina": {
     "x": 2160,
     "y": 220,

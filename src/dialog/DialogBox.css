@@ -1,0 +1,141 @@
+/* Размеры — в пикселях холста: окно масштабируется вместе со сценой. */
+
+.dialog {
+  position: absolute;
+  padding: 64px 72px 48px;
+  border-radius: 40px;
+  font-family: var(--font-main);
+  cursor: pointer;
+  user-select: none;
+}
+
+.dialog__name {
+  position: absolute;
+  top: -34px;
+  left: 64px;
+  padding: 8px 40px;
+  border-radius: 20px;
+  font-size: 40px;
+  font-weight: 700;
+}
+
+.dialog__text {
+  margin: 0;
+  font-size: 46px;
+  line-height: 1.5;
+}
+
+.dialog__rest {
+  visibility: hidden;
+}
+
+.dialog__choices {
+  display: flex;
+  gap: 24px;
+  margin-top: 28px;
+}
+
+.dialog__choice {
+  padding: 16px 40px;
+  border-radius: 24px;
+  font: inherit;
+  font-size: 38px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    transform 0.2s;
+}
+
+.dialog__choice:hover,
+.dialog__choice:focus-visible {
+  transform: translateY(-4px);
+  outline: none;
+}
+
+/* Значок «дальше» — треугольник в правом нижнем углу */
+.dialog__next {
+  position: absolute;
+  right: 56px;
+  bottom: 40px;
+  width: 0;
+  height: 0;
+  border-left: 22px solid transparent;
+  border-right: 22px solid transparent;
+  border-top: 28px solid currentColor;
+}
+
+/* A. Кремовая карточка */
+.dialog--a {
+  background: var(--color-cream);
+  border: 6px solid var(--color-beige);
+  color: var(--color-text);
+}
+.dialog--a .dialog__name {
+  background: var(--color-crimson);
+  color: var(--color-white);
+}
+.dialog--a .dialog__next {
+  color: var(--color-crimson);
+}
+.dialog--a .dialog__choice {
+  background: var(--color-white);
+  color: var(--color-crimson);
+  border: 4px solid var(--color-pink);
+}
+.dialog--a .dialog__choice:hover,
+.dialog--a .dialog__choice:focus-visible {
+  background: var(--color-pink);
+  color: var(--color-text);
+}
+
+/* B. Матовое стекло */
+.dialog--b {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(24px);
+  border: 4px solid rgba(255, 255, 255, 0.75);
+  color: var(--color-text);
+}
+.dialog--b .dialog__name {
+  background: var(--color-crimson);
+  color: var(--color-white);
+}
+.dialog--b .dialog__next {
+  color: var(--color-crimson);
+}
+.dialog--b .dialog__choice {
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--color-crimson);
+  border: 4px solid rgba(255, 255, 255, 0.9);
+}
+.dialog--b .dialog__choice:hover,
+.dialog--b .dialog__choice:focus-visible {
+  background: var(--color-white);
+  color: var(--color-text);
+}
+
+/* C. Тёплая вуаль */
+.dialog--c {
+  background: rgba(60, 25, 40, 0.74);
+  backdrop-filter: blur(12px);
+  border: 4px solid rgba(255, 184, 203, 0.45);
+  color: var(--color-cream);
+}
+.dialog--c .dialog__name {
+  background: var(--color-pink);
+  color: var(--color-text);
+}
+.dialog--c .dialog__next {
+  color: var(--color-pink);
+}
+.dialog--c .dialog__choice {
+  background: rgba(255, 243, 224, 0.12);
+  color: var(--color-cream);
+  border: 4px solid rgba(255, 184, 203, 0.6);
+}
+.dialog--c .dialog__choice:hover,
+.dialog--c .dialog__choice:focus-visible {
+  background: var(--color-pink);
+  color: var(--color-text);
+}

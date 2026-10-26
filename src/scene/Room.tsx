@@ -5,6 +5,9 @@ import { useStageScale } from './useStageScale'
 import { RoomPlaceholder } from './RoomPlaceholder'
 import { Polina } from './Polina'
 import { MarkupOverlay } from './MarkupOverlay'
+import { Dialog } from '../dialog/Dialog'
+import { VariantPanel } from '../dialog/VariantPanel'
+import { showVariantPanel } from '../dialog/variants'
 import './Room.css'
 
 const showMarkup = new URLSearchParams(window.location.search).has('razmetka')
@@ -13,7 +16,6 @@ export function Room() {
   const { scale, left, top } = useStageScale()
   const [cursor, setCursor] = useState<{ x: number; y: number } | null>(null)
   const { width: W, height: H } = layout.canvas
-  const d = layout.dialog
   const room = layout.room
 
   // Координаты курсора в пикселях холста — чтобы сверять зоны с картинкой.
@@ -34,12 +36,11 @@ export function Room() {
           <RoomPlaceholder />
         )}
         <Polina />
-        <div
-          className="room__dialog-placeholder"
-          style={{ left: d.x + 80, top: d.y + 30, width: d.width - 160, height: d.height - 60 }}
-        />
+        <Dialog />
         {showMarkup && <MarkupOverlay />}
       </div>
+
+      {showVariantPanel && <VariantPanel />}
 
       {showMarkup && (
         <div className="room__readout">

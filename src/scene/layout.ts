@@ -18,6 +18,8 @@ export type Layout = {
   // Где лежит картинка комнаты на холсте и каким цветом залить края за ней
   room: Rect & { edgeColor: string }
   dialog: Rect
+  // Само окно внутри зоны диалога; верх ниже смартфона на столе
+  dialogBox: Rect
   polina: Rect
   monitorScreen: Rect
   items: Item[]
