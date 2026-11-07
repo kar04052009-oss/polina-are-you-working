@@ -12,6 +12,7 @@ const showMarkup = new URLSearchParams(window.location.search).has('razmetka')
 
 export function Room() {
   const { scale, left, top } = useStageScale()
+  const [emotion, setEmotion] = useState('neutral')
   const [cursor, setCursor] = useState<{ x: number; y: number } | null>(null)
   const { width: W, height: H } = layout.canvas
   const room = layout.room
@@ -33,8 +34,8 @@ export function Room() {
         ) : (
           <RoomPlaceholder />
         )}
-        <Polina />
-        <Dialog />
+        <Polina emotion={emotion} />
+        <Dialog onEmotion={setEmotion} />
         {showMarkup && <MarkupOverlay />}
       </div>
 

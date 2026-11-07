@@ -1,7 +1,5 @@
-import { parse } from 'yaml'
 import mainRaw from '../../content/dialogues/main.yaml?raw'
+import { parseScript } from './script'
 
-export type Line = { speaker: string; emotion?: string; text: string }
-export type Script = { greeting: Line[] }
-
-export const mainScript = parse(mainRaw) as Script
+// Сценарий уже проверен при сборке, поэтому здесь просто читаем его.
+export const mainScript = parseScript(mainRaw)

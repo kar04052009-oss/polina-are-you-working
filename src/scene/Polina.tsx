@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from 'motion/react'
 import { layout } from './layout'
 import { polinaSprite } from './assets'
 
@@ -8,23 +9,32 @@ const fadeBottom = 'linear-gradient(to bottom, black 80%, transparent 97%)'
 export function Polina({ emotion = 'neutral' }: { emotion?: string }) {
   const { width: W, height: H } = layout.canvas
   const p = layout.polina
-  const src = polinaSprite(emotion)
+  // Если файла нужной эмоции ещё нет — показываем neutral
+  const src = polinaSprite(emotion) ?? polinaSprite('neutral')
 
   if (src) {
     return (
-      <img
-        src={src}
-        alt=""
-        style={{
-          position: 'absolute',
-          left: p.x,
-          top: p.y,
-          width: p.width,
-          height: p.height,
-          maskImage: fadeBottom,
-          WebkitMaskImage: fadeBottom,
-        }}
-      />
+      // Смена эмоции — быстрое растворение за 0,2 секунды (выбрано на этапе 4)
+      <AnimatePresence initial={false}>
+        <motion.img
+          key={src}
+          src={src}
+          alt=""
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          style={{
+            position: 'absolute',
+            left: p.x,
+            top: p.y,
+            width: p.width,
+            height: p.height,
+            maskImage: fadeBottom,
+            WebkitMaskImage: fadeBottom,
+          }}
+        />
+      </AnimatePresence>
     )
   }
 
