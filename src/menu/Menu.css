@@ -1,0 +1,116 @@
+/* Меню в углу экрана: размеры в обычных пикселях, вместе со сценой не уменьшается. */
+
+.menu {
+  position: fixed;
+  z-index: 10;
+  font-family: var(--font-main);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.menu__item,
+.menu__toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 12px;
+  background: rgba(60, 25, 40, 0.74);
+  backdrop-filter: blur(8px);
+  border: 2px solid rgba(255, 184, 203, 0.45);
+  color: var(--color-cream);
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+
+.menu__item:hover,
+.menu__item:focus-visible,
+.menu__toggle:hover,
+.menu__toggle:focus-visible {
+  background: var(--color-pink);
+  color: var(--color-text);
+  outline: none;
+}
+
+/* A. Строка кнопок справа сверху */
+.menu--a {
+  top: 16px;
+  right: 16px;
+  display: flex;
+  gap: 8px;
+}
+
+/* B. Кнопка «Меню» с выпадающим списком */
+.menu--b {
+  top: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.menu__list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border-radius: 16px;
+  background: rgba(60, 25, 40, 0.6);
+  backdrop-filter: blur(8px);
+}
+
+/* C. Колонка значков у левого края, подпись при наведении */
+.menu--c {
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.menu--c .menu__item {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.menu--c .menu__label {
+  position: absolute;
+  left: 58px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  background: var(--color-pink);
+  color: var(--color-text);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+  pointer-events: none;
+}
+
+.menu--c .menu__item:hover .menu__label,
+.menu--c .menu__item:focus-visible .menu__label {
+  opacity: 1;
+  transform: none;
+}
+
+.menu__icon {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

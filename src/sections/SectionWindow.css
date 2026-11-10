@@ -1,0 +1,58 @@
+/* Размеры — в пикселях холста, окно масштабируется вместе со сценой. Стиль «Тёплая вуаль». */
+
+.section-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(40, 15, 28, 0.45);
+}
+
+.section-window {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 80px 96px;
+  border-radius: 48px;
+  background: rgba(60, 25, 40, 0.86);
+  backdrop-filter: blur(16px);
+  border: 4px solid rgba(255, 184, 203, 0.45);
+  color: var(--color-cream);
+  font-family: var(--font-main);
+  cursor: default;
+}
+
+.section-window__title {
+  margin: 0 0 32px;
+  font-size: 88px;
+  font-weight: 700;
+  color: var(--color-pink);
+}
+
+.section-window__text {
+  margin: 0;
+  font-size: 48px;
+  line-height: 1.5;
+}
+
+.section-window__close {
+  margin-top: auto;
+  padding: 16px 48px;
+  border-radius: 24px;
+  background: rgba(255, 243, 224, 0.12);
+  color: var(--color-cream);
+  border: 4px solid rgba(255, 184, 203, 0.6);
+  font: inherit;
+  font-size: 40px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+
+.section-window__close:hover,
+.section-window__close:focus-visible {
+  background: var(--color-pink);
+  color: var(--color-text);
+  outline: none;
+}

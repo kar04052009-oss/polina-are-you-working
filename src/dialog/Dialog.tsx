@@ -1,23 +1,36 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { layout } from '../scene/layout'
 import { mainScript } from '../content/dialogues'
-import type { Line } from '../content/script'
+import type { Line, Section } from '../content/script'
 import { DialogBox } from './DialogBox'
 import { isReturning, rememberVisit } from './visit'
 
 // Скорость печати: 35 знаков в секунду (выбрано на этапе 3)
 const TYPING_SPEED = 35
 
+const NOT_FOUND = 'Кажется, такой страницы нет. Но раз уж ты здесь — заходи!'
+
 type Position = { scene: string; index: number }
 
+type Props = {
+  onEmotion: (emotion: string) => void
+  onSection: (section: Section) => void
+  // Пока открыт раздел, клики и клавиши не листают диалог
+  paused: boolean
+  // «Начать сначала» — знакомство с первой реплики, даже если гость уже был
+  fromStart: boolean
+  // Гость пришёл по неизвестному адресу
+  notFound: boolean
+}
+
 // Ведёт диалог по сценарию: клик, пробел или Enter дописывают реплику, следующий — показывают следующую.
-export function Dialog({ onEmotion }: { onEmotion: (emotion: string) => void }) {
+export function Dialog({ onEmotion, onSection, paused, fromStart, notFound }: Props) {
   const [pos, setPos] = useState<Position>(() => ({
-    scene: isReturning() ? mainScript.returnStart : mainScript.start,
+    scene: !fromStart && isReturning() ? mainScript.returnStart : mainScript.start,
     index: 0,
   }))
-  // Временная реплика вместо раздела, который ещё не готов; после неё — снова вопрос
-  const [interlude, setInterlude] = useState<string | null>(null)
+  // Отдельная реплика не из сценария; после неё — снова сценарий
+  const [interlude, setInterlude] = useState<string | null>(notFound ? NOT_FOUND : null)
   const skipRef = useRef<(() => boolean) | null>(null)
 
   useEffect(rememberVisit, [])
@@ -41,15 +54,16 @@ export function Dialog({ onEmotion }: { onEmotion: (emotion: string) => void }) 
     if (line.kind !== 'question') return
     const answer = line.answers[i]
     if (answer.next) setPos({ scene: answer.next, index: 0 })
-    else if (answer.section) setInterlude(`Раздел «${answer.section}» скоро появится — загляни чуть позже!`)
+    else if (answer.section) onSection(answer.section)
   }
 
   useEffect(() => {
+    if (paused) return
     const onClick = () => advance()
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== ' ' && e.key !== 'Enter') return
-      // На кнопке выбора пробел и Enter нажимают саму кнопку
-      if ((e.target as HTMLElement).closest('button')) return
+      // На кнопках и ссылках пробел и Enter нажимают их самих
+      if ((e.target as HTMLElement).closest('button, a')) return
       e.preventDefault()
       advance()
     }
@@ -59,7 +73,7 @@ export function Dialog({ onEmotion }: { onEmotion: (emotion: string) => void }) 
       document.removeEventListener('click', onClick)
       document.removeEventListener('keydown', onKey)
     }
-  }, [advance])
+  }, [advance, paused])
 
   return (
     <DialogBox

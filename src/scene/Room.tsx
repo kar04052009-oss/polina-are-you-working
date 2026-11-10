@@ -5,14 +5,29 @@ import { useStageScale } from './useStageScale'
 import { RoomPlaceholder } from './RoomPlaceholder'
 import { Polina } from './Polina'
 import { MarkupOverlay } from './MarkupOverlay'
+import { AnimatePresence } from 'motion/react'
 import { Dialog } from '../dialog/Dialog'
+import { Menu } from '../menu/Menu'
+import { SectionWindow } from '../sections/SectionWindow'
+import { closeSection, openSection, useRoute } from '../router/routes'
 import './Room.css'
 
 const showMarkup = new URLSearchParams(window.location.search).has('razmetka')
 
 export function Room() {
   const { scale, left, top } = useStageScale()
+  const route = useRoute()
   const [emotion, setEmotion] = useState('neutral')
+  // «Начать сначала» пересоздаёт диалог с первой реплики знакомства
+  const [restarts, setRestarts] = useState(0)
+  // Адрес с опечаткой запоминаем один раз — при первом открытии
+  const [notFound] = useState(route.notFound)
+
+  const restart = () => {
+    if (route.section) closeSection()
+    setEmotion('neutral')
+    setRestarts((n) => n + 1)
+  }
   const [cursor, setCursor] = useState<{ x: number; y: number } | null>(null)
   const { width: W, height: H } = layout.canvas
   const room = layout.room
@@ -35,9 +50,21 @@ export function Room() {
           <RoomPlaceholder />
         )}
         <Polina emotion={emotion} />
-        <Dialog onEmotion={setEmotion} />
+        <Dialog
+          key={restarts}
+          onEmotion={setEmotion}
+          onSection={openSection}
+          paused={route.section !== null}
+          fromStart={restarts > 0}
+          notFound={notFound && restarts === 0}
+        />
+        <AnimatePresence>
+          {route.section && <SectionWindow key={route.section} section={route.section} onClose={closeSection} />}
+        </AnimatePresence>
         {showMarkup && <MarkupOverlay />}
       </div>
+
+      <Menu onRestart={restart} />
 
       {showMarkup && (
         <div className="room__readout">
