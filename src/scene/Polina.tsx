@@ -3,12 +3,16 @@ import { layout } from './layout'
 import { polinaSprite } from './assets'
 
 // Спрайт эмоции ставится в зону polina из layout.json.
-// Низ спрайта плавно растворяется: он уходит за диалоговое окно, и обрез фигуры не виден.
-const fadeBottom = 'linear-gradient(to bottom, black 80%, transparent 97%)'
+// Низ спрайта плавно растворяется за диалоговым окном, и обрез фигуры не виден.
+// Растворение привязано к окну, а не к размеру спрайта: Полину можно увеличивать, обрез всё равно спрячется.
+const p = layout.polina
+const box = layout.dialogBox
+const fadeFrom = box.y + 40 - p.y
+const fadeTo = box.y + box.height - 40 - p.y
+const fadeBottom = `linear-gradient(to bottom, black ${fadeFrom}px, transparent ${fadeTo}px)`
 
 export function Polina({ emotion = 'neutral' }: { emotion?: string }) {
   const { width: W, height: H } = layout.canvas
-  const p = layout.polina
   // Если файла нужной эмоции ещё нет — показываем neutral
   const src = polinaSprite(emotion) ?? polinaSprite('neutral')
 

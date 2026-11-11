@@ -328,3 +328,89 @@ body {
   margin: 8px 6px;
   background: var(--g-line-soft);
 }
+
+/* Переключатель курсоров */
+.mk-switch {
+  display: flex;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.mk-switch button {
+  padding: 8px 16px;
+  background: #1e1e1e;
+  border: 1px solid #4a4a4a;
+  border-radius: 6px;
+  color: var(--g-text);
+  font-family: var(--mono);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.mk-switch button.is-active {
+  background: var(--g-light);
+  border-color: var(--g-light);
+  color: #1e1e1e;
+}
+
+/* Курсоры (в обычных пикселях экрана) */
+.mk-frame {
+  cursor: none;
+}
+
+.mk-cursor {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.mk-cursor svg {
+  display: block;
+}
+
+.mk-cursor__label {
+  position: absolute;
+  left: 18px;
+  top: 18px;
+  padding: 3px 9px;
+  background: var(--g-light);
+  color: #1e1e1e;
+  border-radius: 0 8px 8px 8px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.mk-cursor__coords {
+  position: absolute;
+  left: 16px;
+  top: 14px;
+  padding: 3px 8px;
+  background: #1e1e1e;
+  color: var(--g-text);
+  border: 1px solid #4a4a4a;
+  white-space: nowrap;
+}
+
+.mk-cursor__swatch {
+  position: absolute;
+  left: 18px;
+  top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px 3px 3px;
+  background: #1e1e1e;
+  color: var(--g-text);
+  border: 1px solid #4a4a4a;
+  border-radius: 14px;
+  white-space: nowrap;
+}
+
+.mk-cursor__swatch span {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
