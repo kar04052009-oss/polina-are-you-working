@@ -104,6 +104,36 @@
       "y": 949,
       "width": 417,
       "height": 195
+    },
+    {
+      "id": "window",
+      "label": "Окно",
+      "goal": "пасхалка",
+      "kind": "easter",
+      "x": 455,
+      "y": 80,
+      "width": 527,
+      "height": 855
+    },
+    {
+      "id": "toys",
+      "label": "Мишки",
+      "goal": "пасхалка",
+      "kind": "easter",
+      "x": 2690,
+      "y": 140,
+      "width": 270,
+      "height": 230
+    },
+    {
+      "id": "polina",
+      "label": "Полина",
+      "goal": "пасхалка",
+      "kind": "easter",
+      "x": 2067,
+      "y": 180,
+      "width": 670,
+      "height": 980
     }
   ]
 }

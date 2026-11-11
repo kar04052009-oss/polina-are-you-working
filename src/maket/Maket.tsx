@@ -7,13 +7,6 @@ const m = layout.main
 const room = layout.room
 const d = layout.dialogBox
 
-type CursorKind = 'podpis' | 'pricel' | 'pipetka'
-
-const CURSORS: [CursorKind, string, string][] = [
-  ['podpis', 'Курсор с подписью', 'Как курсор соавтора в программе для совместной работы: стрелка и плашка «Гость». Над предметами подпись меняется.'],
-  ['pricel', 'Прицел с координатами', 'Перекрестие, как у инструмента выделения, и рядом координаты точки на холсте.'],
-  ['pipetka', 'Пипетка', 'Инструмент «пипетка»: рядом кружок с цветом комнаты под курсором и его код.'],
-]
 
 // Цвет комнаты под курсором — для пипетки. Картинка уменьшается в 4 раза, этого хватает.
 function useRoomPixels() {
@@ -43,42 +36,28 @@ function useRoomPixels() {
   }
 }
 
-// Название предмета под курсором (для курсора с подписью)
-function itemAt(cx: number, cy: number) {
-  const it = layout.items.find((i) => cx >= i.x && cx <= i.x + i.width && cy >= i.y && cy <= i.y + i.height)
-  return it ? it.goal === 'пасхалка' ? it.label : it.goal : null
+// Предмет под курсором. Полина проверяется последней: предметы перед ней важнее.
+function inPolygon(x: number, y: number, pts: [number, number][]) {
+  let inside = false
+  for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+    const [xi, yi] = pts[i]
+    const [xj, yj] = pts[j]
+    if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside
+  }
+  return inside
 }
 
-function Cursor({ kind, x, y, cx, cy, sample }: { kind: CursorKind; x: number; y: number; cx: number; cy: number; sample: (cx: number, cy: number) => string }) {
-  if (kind === 'podpis') {
-    const label = itemAt(cx, cy) ?? 'Гость'
-    return (
-      <div className="mk-cursor" style={{ left: x, top: y }}>
-        <svg width="22" height="22" viewBox="0 0 22 22">
-          <path d="M2 2 L2 18 L7 13.5 L10.5 20 L13.5 18.6 L10 12 L17 12 Z" fill="#1e1e1e" stroke="#fff" strokeWidth="1.5" strokeLinejoin="round" />
-        </svg>
-        <span className="mk-cursor__label">{label}</span>
-      </div>
-    )
-  }
-  if (kind === 'pricel') {
-    return (
-      <div className="mk-cursor mk-cursor--center" style={{ left: x, top: y }}>
-        <svg width="34" height="34" viewBox="0 0 34 34" style={{ transform: 'translate(-17px, -17px)' }}>
-          <g stroke="#1e1e1e" strokeWidth="4">
-            <path d="M17 1v11M17 22v11M1 17h11M22 17h11" />
-          </g>
-          <g stroke="#fff" strokeWidth="1.6">
-            <path d="M17 1v11M17 22v11M1 17h11M22 17h11" />
-          </g>
-        </svg>
-        <span className="mk-cursor__coords">
-          x {cx} · y {cy}
-        </span>
-      </div>
-    )
-  }
+function itemAt(cx: number, cy: number) {
+  const items = [...layout.items].sort((a, b) => (a.id === 'polina' ? 1 : 0) - (b.id === 'polina' ? 1 : 0))
+  return items.find((i) =>
+    i.points ? inPolygon(cx, cy, i.points) : cx >= i.x && cx <= i.x + i.width && cy >= i.y && cy <= i.y + i.height,
+  )
+}
+
+// Курсор-пипетка: кружок с цветом комнаты под курсором и его код; над предметами — подпись
+function Cursor({ x, y, cx, cy, sample }: { x: number; y: number; cx: number; cy: number; sample: (cx: number, cy: number) => string }) {
   const color = sample(cx, cy)
+  const item = itemAt(cx, cy)
   return (
     <div className="mk-cursor" style={{ left: x, top: y }}>
       <svg width="24" height="24" viewBox="0 0 24 24" style={{ transform: 'translate(-2px, -22px)' }}>
@@ -91,7 +70,13 @@ function Cursor({ kind, x, y, cx, cy, sample }: { kind: CursorKind; x: number; y
         />
       </svg>
       <span className="mk-cursor__swatch">
-        <span style={{ background: color }} />
+        <span className="mk-cursor__dot" style={{ background: color }} />
+        {item && (
+          <b className="mk-cursor__name">
+            {item.label}
+            {item.kind === 'section' && <em> · {item.goal}</em>}
+          </b>
+        )}
         {color}
       </span>
     </div>
@@ -99,7 +84,7 @@ function Cursor({ kind, x, y, cx, cy, sample }: { kind: CursorKind; x: number; y
 }
 
 // Кадр 16:9 с основной зоной комнаты; всё внутри — в пикселях холста, как на сайте
-function Frame({ title, note, cursor, children }: { title: string; note: string; cursor: CursorKind; children: ReactNode }) {
+function Frame({ title, note, children }: { title: string; note: string; children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null)
   const [scale, setScale] = useState(0.4)
   const [pos, setPos] = useState<{ x: number; y: number } | null>(null)
@@ -140,7 +125,6 @@ function Frame({ title, note, cursor, children }: { title: string; note: string;
         </div>
         {pos && (
           <Cursor
-            kind={cursor}
             x={pos.x}
             y={pos.y}
             cx={Math.round(m.x + pos.x / scale)}
@@ -185,30 +169,18 @@ function MenuButton({ open = false }: { open?: boolean }) {
 }
 
 export function Maket() {
-  const [cursor, setCursor] = useState<CursorKind>('podpis')
-  const current = CURSORS.find(([k]) => k === cursor)!
-
   return (
     <main className="mk">
       <header className="mk-head">
         <h1>Макет интерфейса · направление C «Рабочая программа» · графит</h1>
         <p>
-          Выбрано окно-панель. Полина стала крупнее примерно на 15%. Наведите мышь на комнату, чтобы увидеть курсор, а
-          варианты курсора переключаются кнопками ниже. Это только макет — на сайте ничего не изменилось.
+          Выбрано окно-панель. Полина стала крупнее примерно на 15%. Курсор — пипетка: рядом с ним цвет комнаты под курсором. Над
+          предметами, которые можно будет нажимать, появляется подпись. Это только макет — на сайте ничего не изменилось.
         </p>
-        <div className="mk-switch">
-          {CURSORS.map(([k, name]) => (
-            <button key={k} className={k === cursor ? 'is-active' : ''} onClick={() => setCursor(k)}>
-              {name}
-            </button>
-          ))}
-        </div>
-        <p className="mk-note">{current[2]}</p>
       </header>
 
       <Frame
         title="Окно-панель"
-        cursor={cursor}
         note="Реплика в отдельной панели программы с заголовком и значками «свернуть / развернуть / закрыть». Ответы — строки, как слои в панели слоёв."
       >
         <div className="mk-window" style={{ left: d.x, top: d.y - 40, width: d.width, height: d.height + 40 }}>
@@ -235,7 +207,6 @@ export function Maket() {
 
       <Frame
         title="Меню и окно раздела"
-        cursor={cursor}
         note="Меню раскрывается как меню программы, с «горячими клавишами». Раздел открывается окном приложения с заголовком и кнопкой ×."
       >
         <div className="mk-dim" style={{ width: layout.canvas.width, height: layout.canvas.height }} />

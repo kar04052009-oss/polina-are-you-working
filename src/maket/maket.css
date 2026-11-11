@@ -408,9 +408,22 @@ body {
   white-space: nowrap;
 }
 
-.mk-cursor__swatch span {
+.mk-cursor__dot {
   width: 18px;
   height: 18px;
   border-radius: 50%;
   border: 2px solid #fff;
+}
+
+.mk-cursor__name {
+  padding-right: 6px;
+  margin-right: 2px;
+  border-right: 1px solid #4a4a4a;
+  font-weight: 700;
+}
+
+.mk-cursor__name em {
+  font-style: normal;
+  font-weight: 400;
+  color: var(--g-muted);
 }
