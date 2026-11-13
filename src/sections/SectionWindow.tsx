@@ -3,13 +3,8 @@ import { motion } from 'motion/react'
 import type { Section } from '../content/script'
 import { layout } from '../scene/layout'
 import { SECTION_TITLES } from '../router/routes'
+import { texts } from '../content/interface'
 import './SectionWindow.css'
-
-const SOON: Record<Section, string> = {
-  портфолио: 'Скоро здесь будет рабочий стол с папками моих проектов.',
-  'обо мне': 'Скоро здесь будет рассказ обо мне.',
-  контакты: 'Скоро здесь будут ссылки, по которым меня можно найти.',
-}
 
 // Раздел открывается окном приложения поверх комнаты. Пока заглушка — настоящие разделы появятся на этапах 7–10.
 export function SectionWindow({ section, onClose }: { section: Section; onClose: () => void }) {
@@ -59,7 +54,7 @@ export function SectionWindow({ section, onClose }: { section: Section; onClose:
           <h1 id="section-title" className="section-window__title">
             {SECTION_TITLES[section]}
           </h1>
-          <p className="section-window__text">{SOON[section]}</p>
+          <p className="section-window__text">{texts.soon(section)}</p>
         </div>
       </motion.section>
     </motion.div>

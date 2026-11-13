@@ -7,25 +7,36 @@ export const SECTIONS = ['портфолио', 'обо мне', 'контакт�
 export type Section = (typeof SECTIONS)[number]
 
 // Пасхалка в сценарии → id предмета в src/scene/layout.json
-export const EASTER_ITEMS: Record<string, string> = { кот: 'cat', кружки: 'mug' }
+export const EASTER_ITEMS: Record<string, string> = { кот: 'cat', кружки: 'mug', окно: 'window', мишки: 'toys', полина: 'polina' }
+
+// Реакции Полины на поведение гостя (заработают на этапе 6)
+export const REACTIONS = ['долгая тишина', 'снова осмотр', 'много кликов'] as const
+export type Reaction = (typeof REACTIONS)[number]
 
 export type Answer = { text: string; next?: string; section?: Section }
 export type Line =
   | { kind: 'line'; emotion?: string; text: string }
   | { kind: 'question'; emotion?: string; text: string; answers: Answer[] }
 
+// В «пасхалках», «перед разделом», «после раздела» и «реакциях» каждая реплика — отдельный вариант:
+// на одно событие звучит одна реплика, при следующем — следующая, по кругу.
 export type Script = {
   start: string
   returnStart: string
+  // Сцена для адреса с опечаткой; после неё — обычное начало
+  notFound?: string
   scenes: Record<string, Line[]>
   easter: Record<string, Line[]>
+  beforeSection: Partial<Record<Section, Line[]>>
+  afterSection: Partial<Record<Section, Line[]>>
+  reactions: Partial<Record<Reaction, Line[]>>
 }
 
 export class ScriptError extends Error {}
 
 const LINE_KEYS = ['эмоция', 'текст', 'вопрос', 'ответы']
 const ANSWER_KEYS = ['текст', 'дальше', 'раздел']
-const TOP_KEYS = ['начало', 'повторный визит', 'сцены', 'пасхалки']
+const TOP_KEYS = ['начало', 'повторный визит', 'страница не найдена', 'сцены', 'пасхалки', 'перед разделом', 'после раздела', 'реакции']
 
 type Raw = Record<string, unknown>
 const isObject = (v: unknown): v is Raw => typeof v === 'object' && v !== null && !Array.isArray(v)
@@ -38,7 +49,14 @@ export function parseScript(source: string): Script {
   try {
     raw = parse(source)
   } catch (e) {
-    throw new ScriptError(`Не получается прочитать файл: ${(e as Error).message}`)
+    const message = (e as Error).message
+    const line = message.match(/at line (\d+)/)?.[1]
+    const where = line ? `строка ${line}` : 'место не определено'
+    // Самая частая ошибка — двоеточие с пробелом внутри текста
+    const hint = /Nested mappings|mapping values|compact mappings/i.test(message)
+      ? 'Скорее всего, в тексте есть двоеточие с пробелом. Возьми весь текст в кавычки: текст: "Так: вот."'
+      : 'Проверь отступы (пробелы в начале строк) и что каждая реплика начинается с «- ».'
+    throw new ScriptError(`Не получается прочитать файл (${where}). ${hint}\nТехнически: ${message.split('\n')[0]}`)
   }
   if (!isObject(raw)) throw new ScriptError('Файл пустой или устроен не так, как в образце.')
 
@@ -110,15 +128,25 @@ export function parseScript(source: string): Script {
   if (!isObject(raw['сцены'])) errors.push('Нет раздела «сцены:».')
   else for (const [name, list] of Object.entries(raw['сцены'])) scenes[name] = readLines(`Сцена «${name}»`, list)
 
-  const easter: Record<string, Line[]> = {}
-  if (raw['пасхалки'] !== undefined) {
-    if (!isObject(raw['пасхалки'])) errors.push('«пасхалки:» устроены не так, как в образце.')
-    else
-      for (const [name, list] of Object.entries(raw['пасхалки'])) {
-        if (!(name in EASTER_ITEMS)) errors.push(`Пасхалка «${name}»: такого предмета нет. Возможные: ${Object.keys(EASTER_ITEMS).join(', ')}.`)
-        easter[name] = readLines(`Пасхалка «${name}»`, list)
-      }
+  // Группа реплик-вариантов с заранее известными названиями (пасхалки, разделы, реакции)
+  const readGroup = (key: string, allowed: readonly string[], what: string) => {
+    const out: Record<string, Line[]> = {}
+    const group = raw[key]
+    if (group === undefined) return out
+    if (!isObject(group)) {
+      errors.push(`«${key}:» устроено не так, как в образце.`)
+      return out
+    }
+    for (const [name, list] of Object.entries(group)) {
+      if (!allowed.includes(name)) errors.push(`«${key}» → «${name}»: нет такого ${what}. Возможные: ${allowed.join(', ')}.`)
+      out[name] = readLines(`«${key}» → «${name}»`, list)
+    }
+    return out
   }
+  const easter = readGroup('пасхалки', Object.keys(EASTER_ITEMS), 'предмета')
+  const beforeSection = readGroup('перед разделом', SECTIONS, 'раздела')
+  const afterSection = readGroup('после раздела', SECTIONS, 'раздела')
+  const reactions = readGroup('реакции', REACTIONS, 'реакции')
 
   // Ссылки на сцены
   const sceneExists = (name: unknown, where: string) => {
@@ -127,17 +155,28 @@ export function parseScript(source: string): Script {
   }
   sceneExists(raw['начало'], '«начало»')
   sceneExists(raw['повторный визит'], '«повторный визит»')
+  if (raw['страница не найдена'] !== undefined) sceneExists(raw['страница не найдена'], '«страница не найдена»')
   for (const { where, next } of refs) {
     if (!(next in scenes)) errors.push(`${where}: нет сцены «${next}». Есть: ${Object.keys(scenes).join(', ')}.`)
   }
 
   if (errors.length) throw new ScriptError(`Ошибки в сценарии content/dialogues/main.yaml:\n- ${errors.join('\n- ')}`)
 
-  return { start: String(raw['начало']), returnStart: String(raw['повторный визит']), scenes, easter }
+  return {
+    start: String(raw['начало']),
+    returnStart: String(raw['повторный визит']),
+    notFound: raw['страница не найдена'] === undefined ? undefined : String(raw['страница не найдена']),
+    scenes,
+    easter,
+    beforeSection,
+    afterSection,
+    reactions,
+  }
 }
 
 // Все эмоции, которые встречаются в сценарии (для проверки, есть ли файлы спрайтов)
 export function usedEmotions(script: Script): string[] {
-  const all = [...Object.values(script.scenes), ...Object.values(script.easter)].flat()
+  const groups = [script.scenes, script.easter, script.beforeSection, script.afterSection, script.reactions]
+  const all = groups.flatMap((g) => Object.values(g)).flat() as Line[]
   return [...new Set(all.map((l) => l.emotion).filter((e): e is string => !!e))]
 }

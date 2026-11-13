@@ -1,4 +1,5 @@
 import { motion } from 'motion/react'
+import { texts } from '../content/interface'
 import './screens.css'
 
 // Экран для вертикального планшета — окно программы в графите
@@ -21,9 +22,9 @@ export function RotateScreen() {
             <rect x="10" y="10" width="100" height="140" rx="10" style={{ fill: 'none', stroke: 'var(--ui-text)', strokeWidth: 5 }} />
             <circle cx="60" cy="136" r="4" style={{ fill: 'var(--ui-text)' }} />
           </motion.svg>
-          <h1 className="screen__title">Поверни планшет</h1>
-          <p className="screen__text">Так комната поместится целиком.</p>
-          <p className="screen__hint">Изображение → Поворот холста → 90°</p>
+          <h1 className="screen__title">{texts.tablet.title}</h1>
+          <p className="screen__text">{texts.tablet.text}</p>
+          {texts.tablet.hint && <p className="screen__hint">{texts.tablet.hint}</p>}
         </div>
       </div>
     </main>

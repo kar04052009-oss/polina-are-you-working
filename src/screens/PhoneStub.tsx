@@ -1,6 +1,7 @@
 import { motion } from 'motion/react'
 import { contacts } from '../content/contacts'
 import { polinaSprite } from '../scene/assets'
+import { texts } from '../content/interface'
 import './screens.css'
 
 // Заглушка для телефонов — окно программы в графите
@@ -29,8 +30,8 @@ export function PhoneStub() {
               <rect x="40" y="130" width="120" height="90" rx="50" style={{ fill: 'var(--ui-bar)', stroke: 'var(--ui-line)', strokeWidth: 4 }} />
             </svg>
           )}
-          <h1 className="screen__title">Загляни ко мне с компьютера</h1>
-          <p className="screen__text">Мой сайт — маленькая комната, и на большом экране в ней гораздо уютнее.</p>
+          <h1 className="screen__title">{texts.phone.title}</h1>
+          <p className="screen__text">{texts.phone.text}</p>
           {contacts.length > 0 && (
             <ul className="screen__links">
               {contacts.map((link) => (

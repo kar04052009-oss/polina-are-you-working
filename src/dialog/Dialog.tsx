@@ -8,8 +8,6 @@ import { isReturning, rememberVisit } from './visit'
 // Скорость печати: 35 знаков в секунду (выбрано на этапе 3)
 const TYPING_SPEED = 35
 
-const NOT_FOUND = 'Кажется, такой страницы нет. Но раз уж ты здесь — заходи!'
-
 type Position = { scene: string; index: number }
 
 type Props = {
@@ -25,18 +23,18 @@ type Props = {
 
 // Ведёт диалог по сценарию: клик, пробел или Enter дописывают реплику, следующий — показывают следующую.
 export function Dialog({ onEmotion, onSection, paused, fromStart, notFound }: Props) {
+  // Обычное начало: знакомство или «снова ты»
+  const [usualStart] = useState(() => (!fromStart && isReturning() ? mainScript.returnStart : mainScript.start))
+  // Адрес с опечаткой — сначала сцена «страница не найдена», после неё обычное начало
   const [pos, setPos] = useState<Position>(() => ({
-    scene: !fromStart && isReturning() ? mainScript.returnStart : mainScript.start,
+    scene: notFound && mainScript.notFound ? mainScript.notFound : usualStart,
     index: 0,
   }))
-  // Отдельная реплика не из сценария; после неё — снова сценарий
-  const [interlude, setInterlude] = useState<string | null>(notFound ? NOT_FOUND : null)
   const skipRef = useRef<(() => boolean) | null>(null)
 
   useEffect(rememberVisit, [])
 
-  const sceneLine = mainScript.scenes[pos.scene][pos.index]
-  const line: Line = interlude ? { kind: 'line', text: interlude } : sceneLine
+  const line: Line = mainScript.scenes[pos.scene][pos.index]
 
   useEffect(() => {
     if (line.emotion) onEmotion(line.emotion)
@@ -44,11 +42,14 @@ export function Dialog({ onEmotion, onSection, paused, fromStart, notFound }: Pr
 
   const advance = useCallback(() => {
     if (skipRef.current?.()) return
-    if (interlude) return setInterlude(null)
     if (line.kind === 'question') return
-    // В конце сцены окно остаётся с последней репликой
-    setPos((p) => ({ ...p, index: Math.min(p.index + 1, mainScript.scenes[p.scene].length - 1) }))
-  }, [interlude, line.kind])
+    setPos((p) => {
+      const last = p.index >= mainScript.scenes[p.scene].length - 1
+      if (last && p.scene === mainScript.notFound) return { scene: usualStart, index: 0 }
+      // В конце сцены окно остаётся с последней репликой
+      return last ? p : { ...p, index: p.index + 1 }
+    })
+  }, [line.kind, usualStart])
 
   const choose = (i: number) => {
     if (line.kind !== 'question') return
