@@ -11,7 +11,7 @@ const SOON: Record<Section, string> = {
   контакты: 'Скоро здесь будут ссылки, по которым меня можно найти.',
 }
 
-// Окно раздела поверх комнаты. Пока заглушка — настоящие разделы появятся на этапах 7–10.
+// Раздел открывается окном приложения поверх комнаты. Пока заглушка — настоящие разделы появятся на этапах 7–10.
 export function SectionWindow({ section, onClose }: { section: Section; onClose: () => void }) {
   const { width: W, height: H } = layout.canvas
   const m = layout.main
@@ -31,7 +31,7 @@ export function SectionWindow({ section, onClose }: { section: Section; onClose:
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.25 }}
+      transition={{ duration: 0.2 }}
       onClick={(e) => {
         e.stopPropagation()
         onClose()
@@ -41,20 +41,26 @@ export function SectionWindow({ section, onClose }: { section: Section; onClose:
         className="section-window"
         role="dialog"
         aria-labelledby="section-title"
-        style={{ left: m.x + 480, top: m.y + 200, width: m.width - 960, height: 760 }}
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 30 }}
-        transition={{ duration: 0.3, ease: 'easeOut' }}
+        style={{ left: m.x + 420, top: m.y + 160, width: m.width - 840, height: 880 }}
+        initial={{ opacity: 0, scale: 0.97 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.97 }}
+        transition={{ duration: 0.2, ease: 'easeOut' }}
         onClick={(e) => e.stopPropagation()}
       >
-        <h1 id="section-title" className="section-window__title">
-          {SECTION_TITLES[section]}
-        </h1>
-        <p className="section-window__text">{SOON[section]}</p>
-        <button className="section-window__close" onClick={onClose} autoFocus>
-          Закрыть
-        </button>
+        <div className="section-window__bar">
+          <span>{SECTION_TITLES[section]}</span>
+          <button className="section-window__close" onClick={onClose} aria-label="Закрыть" autoFocus>
+            ×
+          </button>
+        </div>
+        <div className="section-window__body">
+          <div className="section-window__crumbs">Полина › {SECTION_TITLES[section]}</div>
+          <h1 id="section-title" className="section-window__title">
+            {SECTION_TITLES[section]}
+          </h1>
+          <p className="section-window__text">{SOON[section]}</p>
+        </div>
       </motion.section>
     </motion.div>
   )

@@ -1,0 +1,53 @@
+/* Курсор-пипетка — в обычных пикселях экрана, поверх всего */
+
+.room--pipette {
+  cursor: none;
+}
+
+.pipette {
+  position: fixed;
+  z-index: 20;
+  pointer-events: none;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+/* Кончик пипетки — точно в точке курсора */
+.pipette__icon {
+  display: block;
+  transform: translate(-3px, -21px);
+}
+
+.pipette__tag {
+  position: absolute;
+  left: 18px;
+  top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px 3px 3px;
+  background: var(--ui-bg-solid);
+  color: var(--ui-text);
+  border: 1px solid var(--ui-line-soft);
+  border-radius: 14px;
+  white-space: nowrap;
+}
+
+.pipette__dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+.pipette__name {
+  padding-right: 6px;
+  border-right: 1px solid var(--ui-line-soft);
+  font-weight: 700;
+}
+
+.pipette__name em {
+  font-style: normal;
+  font-weight: 400;
+  color: var(--ui-muted);
+}

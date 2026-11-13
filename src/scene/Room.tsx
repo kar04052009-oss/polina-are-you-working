@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { layout } from './layout'
 import { roomImage } from './assets'
 import { useStageScale } from './useStageScale'
 import { RoomPlaceholder } from './RoomPlaceholder'
 import { Polina } from './Polina'
 import { MarkupOverlay } from './MarkupOverlay'
+import { Pipette, hasMouse } from './Pipette'
 import { AnimatePresence } from 'motion/react'
 import { Dialog } from '../dialog/Dialog'
 import { Menu } from '../menu/Menu'
@@ -23,11 +24,11 @@ export function Room() {
   // Адрес с опечаткой запоминаем один раз — при первом открытии
   const [notFound] = useState(route.notFound)
 
-  const restart = () => {
+  const restart = useCallback(() => {
     if (route.section) closeSection()
     setEmotion('neutral')
     setRestarts((n) => n + 1)
-  }
+  }, [route.section])
   const [cursor, setCursor] = useState<{ x: number; y: number } | null>(null)
   const { width: W, height: H } = layout.canvas
   const room = layout.room
@@ -39,7 +40,7 @@ export function Room() {
   }
 
   return (
-    <div className="room" onMouseMove={onMove} style={roomImage ? { background: layout.room.edgeColor } : undefined}>
+    <div className={`room ${hasMouse ? 'room--pipette' : ''}`} onMouseMove={onMove} style={roomImage ? { background: layout.room.edgeColor } : undefined}>
       <div
         className="room__stage"
         style={{ width: W, height: H, transform: `translate(${left}px, ${top}px) scale(${scale})` }}
@@ -65,6 +66,7 @@ export function Room() {
       </div>
 
       <Menu onRestart={restart} />
+      {hasMouse && <Pipette scale={scale} left={left} top={top} />}
 
       {showMarkup && (
         <div className="room__readout">

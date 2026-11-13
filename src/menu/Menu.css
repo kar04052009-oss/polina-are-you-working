@@ -1,4 +1,5 @@
-/* Меню в углу экрана: размеры в обычных пикселях, вместе со сценой не уменьшается. */
+/* Меню в углу экрана: размеры в обычных пикселях, вместе со сценой не уменьшается.
+   Вид — выпадающее меню программы в графите. */
 
 .menu {
   position: fixed;
@@ -8,45 +9,72 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 8px;
-  font-family: var(--font-main);
-  font-size: 15px;
-  font-weight: 700;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  cursor: default;
 }
 
-.menu__item,
 .menu__toggle {
-  display: flex;
-  align-items: center;
-  padding: 8px 16px;
-  border-radius: 12px;
-  background: rgba(60, 25, 40, 0.74);
-  backdrop-filter: blur(8px);
-  border: 2px solid rgba(255, 184, 203, 0.45);
-  color: var(--color-cream);
+  padding: 7px 14px;
+  background: var(--ui-bg);
+  border: 1px solid var(--ui-line-soft);
+  border-radius: 6px;
+  color: var(--ui-text);
   font: inherit;
-  text-decoration: none;
   cursor: pointer;
-  transition:
-    background 0.2s,
-    color 0.2s;
+  transition: border-color 0.15s;
 }
 
-.menu__item:hover,
-.menu__item:focus-visible,
 .menu__toggle:hover,
-.menu__toggle:focus-visible {
-  background: var(--color-pink);
-  color: var(--color-text);
+.menu__toggle:focus-visible,
+.menu__toggle.is-open {
+  border-color: var(--ui-line);
   outline: none;
 }
 
 .menu__list {
+  width: 230px;
+  padding: 5px;
+  background: var(--ui-bg-solid);
+  border: 1px solid var(--ui-line-soft);
+  border-radius: 8px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+}
+
+.menu__item {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 8px;
-  border-radius: 16px;
-  background: rgba(60, 25, 40, 0.6);
-  backdrop-filter: blur(8px);
+  justify-content: space-between;
+  width: 100%;
+  padding: 7px 10px;
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+  color: var(--ui-text);
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.menu__item:hover,
+.menu__item:focus-visible {
+  background: var(--ui-light);
+  color: var(--ui-bg-solid);
+  outline: none;
+}
+
+.menu__key {
+  color: var(--ui-muted);
+}
+
+.menu__item:hover .menu__key,
+.menu__item:focus-visible .menu__key {
+  color: #555;
+}
+
+.menu__sep {
+  height: 1px;
+  margin: 4px 4px;
+  background: var(--ui-line-soft);
 }

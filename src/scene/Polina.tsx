@@ -45,8 +45,8 @@ export function Polina({ emotion = 'neutral' }: { emotion?: string }) {
   const cx = p.x + p.width / 2
   return (
     <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ position: 'absolute', inset: 0 }}>
-      <circle cx={cx} cy={p.y + 170} r={150} style={{ fill: 'var(--color-pink)', stroke: 'var(--color-crimson)', strokeWidth: 8 }} />
-      <rect x={p.x + 120} y={p.y + 340} width={p.width - 240} height={p.height - 340} rx={160} style={{ fill: 'var(--color-pink)', stroke: 'var(--color-crimson)', strokeWidth: 8 }} />
+      <circle cx={cx} cy={p.y + 170} r={150} style={{ fill: 'var(--ui-bar)', stroke: 'var(--ui-line)', strokeWidth: 8 }} />
+      <rect x={p.x + 120} y={p.y + 340} width={p.width - 240} height={p.height - 340} rx={160} style={{ fill: 'var(--ui-bar)', stroke: 'var(--ui-line)', strokeWidth: 8 }} />
     </svg>
   )
 }

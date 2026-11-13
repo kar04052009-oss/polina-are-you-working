@@ -1,64 +1,105 @@
+/* Экраны для телефона и вертикального планшета — окно программы в графите */
+
 .screen {
   min-height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 24px 16px;
-  background: var(--color-pink);
+  background: var(--ui-page);
 }
 
-.screen__card {
+.screen__window {
   width: min(420px, 100%);
-  padding: 32px 24px;
-  background: var(--color-cream);
-  border: 2px solid var(--color-beige);
-  border-radius: 20px;
+  background: var(--ui-bg-solid);
+  border: 1px solid var(--ui-line-soft);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.screen__bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 14px;
+  background: var(--ui-bar);
+  border-bottom: 1px solid var(--ui-line-soft);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--ui-muted);
+}
+
+.screen__body {
+  padding: 28px 24px 30px;
   text-align: center;
 }
 
 .screen__portrait {
-  width: 140px;
-  height: auto;
-  margin: 0 auto 16px;
   display: block;
+  width: 180px;
+  height: 200px;
+  margin: 0 auto 20px;
+  object-fit: cover;
+  object-position: top;
+  border: 1px solid var(--ui-line-soft);
+  border-radius: 6px;
+  background: var(--ui-bar);
 }
 
 .screen__tablet {
-  width: 90px;
-  height: 120px;
-  margin: 0 auto 20px;
   display: block;
+  width: 80px;
+  height: 108px;
+  margin: 8px auto 22px;
 }
 
 .screen__title {
   margin: 0 0 8px;
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--color-crimson);
+  font-family: var(--font-text);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ui-text);
 }
 
 .screen__text {
   margin: 0;
+  font-family: var(--font-text);
   font-size: 16px;
   line-height: 1.5;
+  color: var(--ui-muted);
+}
+
+.screen__hint {
+  margin: 16px 0 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ui-muted);
 }
 
 .screen__links {
   list-style: none;
-  margin: 20px 0 0;
+  margin: 22px 0 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
+  text-align: left;
 }
 
 .screen__links a {
   display: block;
-  padding: 10px 16px;
-  background: var(--color-white);
-  color: var(--color-crimson);
-  border: 1px solid var(--color-pink);
-  border-radius: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--ui-line-soft);
+  color: var(--ui-text);
+  font-family: var(--font-mono);
+  font-size: 14px;
   text-decoration: none;
-  font-weight: 700;
+}
+
+.screen__links a:active,
+.screen__links a:hover {
+  background: var(--ui-light);
+  border-color: var(--ui-light);
+  color: var(--ui-bg-solid);
 }

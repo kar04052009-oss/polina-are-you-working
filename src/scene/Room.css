@@ -3,7 +3,7 @@
   inset: 0;
   overflow: hidden;
   /* Цвет полос, если окно уже или выше холста */
-  background: var(--color-cream);
+  background: var(--ui-page);
 }
 
 .room__stage {
@@ -23,9 +23,10 @@
   top: 12px;
   left: 12px;
   padding: 8px 14px;
-  background: var(--color-white);
-  color: var(--color-text);
-  border: 1px solid var(--color-beige);
+  background: var(--ui-bg-solid);
+  color: var(--ui-text);
+  border: 1px solid var(--ui-line-soft);
+  font-family: var(--font-mono);
   border-radius: 10px;
   font-size: 14px;
   line-height: 1.5;

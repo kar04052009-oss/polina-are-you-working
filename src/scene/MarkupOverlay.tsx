@@ -3,7 +3,7 @@ import { box, layout, type Item, type Rect } from './layout'
 const blue = '#3f7fbf'
 const beige = '#a07e58'
 const green = '#2e9e7a'
-const crimson = 'var(--color-crimson)'
+const crimson = '#c2456f'
 
 function Box({ r, color, dash, title, sub, bottom }: { r: Rect; color: string; dash?: string; title: string; sub?: string; bottom?: boolean }) {
   // bottom — подпись внизу зоны, когда сверху её закрыла бы соседняя подпись
@@ -44,7 +44,7 @@ export function MarkupOverlay() {
       width={W}
       height={H}
       viewBox={`0 0 ${W} ${H}`}
-      style={{ position: 'absolute', inset: 0, pointerEvents: 'none', fontFamily: 'var(--font-main)' }}
+      style={{ position: 'absolute', inset: 0, pointerEvents: 'none', fontFamily: 'var(--font-mono)' }}
     >
       <path
         d={`M0 0H${W}V${H}H0Z M${m.x} ${m.y}V${m.y + m.height}H${m.x + m.width}V${m.y}Z`}

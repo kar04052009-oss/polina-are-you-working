@@ -35,46 +35,58 @@ export function DialogBox({ box, speaker, text, choices, cps, onChoose, skipRef 
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }}
     >
-      <div className="dialog__name">{speaker}</div>
+      {/* Заголовок окна программы; значки справа — только украшение */}
+      <div className="dialog__bar">
+        <span>Диалог — {speaker}.png</span>
+        <span className="dialog__ctrl" aria-hidden="true">
+          —&nbsp;&nbsp;□&nbsp;&nbsp;×
+        </span>
+      </div>
 
       {/* Для программ чтения с экрана — реплика целиком, без печати по буквам */}
       <p className="sr-only" aria-live="polite">
         {speaker}: {text}
       </p>
 
-      <p className="dialog__text" aria-hidden="true">
-        {shown}
-        {/* Остаток невидим, но занимает место — строки не прыгают при печати */}
-        <span className="dialog__rest">{rest}</span>
-      </p>
+      <div className="dialog__body">
+        <p className="dialog__text" aria-hidden="true">
+          {shown}
+          {/* Остаток невидим, но занимает место — строки не прыгают при печати */}
+          <span className="dialog__rest">{rest}</span>
+        </p>
 
-      {choices && done && (
-        <div className="dialog__choices">
-          {choices.map((c, i) => (
-            <motion.button
-              key={c}
-              className="dialog__choice"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: i * 0.08 }}
-              onClick={(e) => {
-                e.stopPropagation()
-                onChoose?.(i)
-              }}
-            >
-              {c}
-            </motion.button>
-          ))}
-        </div>
-      )}
+        {/* Место под ответы занято сразу, чтобы текст не перестраивался, когда они появятся */}
+        {choices && (
+          <div className="dialog__choices" style={{ visibility: done ? 'visible' : 'hidden' }}>
+            {choices.map((c, i) => (
+              <motion.button
+                key={c}
+                className="dialog__choice"
+                initial={false}
+                animate={done ? { opacity: 1, x: 0 } : { opacity: 0, x: 12 }}
+                transition={{ duration: 0.25, delay: done ? i * 0.07 : 0 }}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onChoose?.(i)
+                }}
+              >
+                <span className="dialog__eye" aria-hidden="true">◉</span>
+                {c}
+              </motion.button>
+            ))}
+          </div>
+        )}
+      </div>
 
       {done && !choices && (
         <motion.div
           className="dialog__next"
           aria-hidden="true"
-          animate={{ opacity: [0.25, 1, 0.25], y: [0, 6, 0] }}
-          transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
-        />
+          animate={{ opacity: [0.35, 1, 0.35] }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          Enter ↵
+        </motion.div>
       )}
     </motion.div>
   )
