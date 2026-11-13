@@ -1,4 +1,5 @@
 import { layout, type Item } from './layout'
+import { hitMask } from './cutouts'
 
 function inPolygon(x: number, y: number, pts: [number, number][]) {
   let inside = false
@@ -10,12 +11,25 @@ function inPolygon(x: number, y: number, pts: [number, number][]) {
   return inside
 }
 
-// Полина проверяется последней: предметы перед ней (и мишки над её плечом) важнее
-const ordered = [...layout.items].sort((a, b) => Number(a.id === 'polina') - Number(b.id === 'polina'))
+function inZone(i: Item, x: number, y: number) {
+  return i.points ? inPolygon(x, y, i.points) : x >= i.x && x <= i.x + i.width && y >= i.y && y <= i.y + i.height
+}
+
+// Точнее всего — по вырезанной картинке предмета; если её нет — по зоне из разметки
+function hits(i: Item, x: number, y: number) {
+  return hitMask(i.id, x, y) ?? inZone(i, x, y)
+}
+
+const polina = layout.items.find((i) => i.id === 'polina')
+const others = layout.items.filter((i) => i.id !== 'polina')
 
 // Предмет под точкой холста (координаты в пикселях холста 3360×1600)
 export function itemAt(x: number, y: number): Item | undefined {
-  return ordered.find((i) =>
-    i.points ? inPolygon(x, y, i.points) : x >= i.x && x <= i.x + i.width && y >= i.y && y <= i.y + i.height,
-  )
+  // Полина стоит перед предметами: по точному силуэту она проверяется первой,
+  // а по грубой зоне — последней, чтобы не перекрывать мишек над плечом
+  if (polina && hitMask('polina', x, y)) return polina
+  const found = others.find((i) => hits(i, x, y))
+  if (found) return found
+  if (polina && hitMask('polina', x, y) === undefined && inZone(polina, x, y)) return polina
+  return undefined
 }

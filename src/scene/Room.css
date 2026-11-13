@@ -34,3 +34,34 @@
   pointer-events: none;
 }
 
+
+/* Невидимые кнопки предметов — только для клавиатуры (Tab, Enter) */
+.room__item {
+  position: absolute;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Подпись предмета на планшете (в пикселях холста) */
+.room__touch-label {
+  position: absolute;
+  padding: 10px 22px;
+  background: var(--ui-bg-solid);
+  border: 2px solid var(--ui-line-soft);
+  border-radius: 30px;
+  color: var(--ui-text);
+  font-family: var(--font-mono);
+  font-size: 30px;
+  font-weight: 700;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.room__touch-label em {
+  font-style: normal;
+  font-weight: 400;
+  color: var(--ui-muted);
+}

@@ -5,9 +5,11 @@ import { useCallback, useEffect, useState } from 'react'
 export function useTypewriter(text: string, cps: number) {
   // Счётчик привязан к тексту: у новой реплики он сразу ноль, без мелькания
   const [state, setState] = useState({ text, count: 0 })
-  const count = state.text === text ? state.count : 0
+  // Без печати (cps = бесконечность) реплика видна сразу целиком
+  const count = cps === Infinity ? text.length : state.text === text ? state.count : 0
 
   useEffect(() => {
+    if (cps === Infinity) return
     const start = performance.now()
     let frame = requestAnimationFrame(function tick(now) {
       const next = Math.min(text.length, Math.floor(((now - start) / 1000) * cps))

@@ -13,9 +13,11 @@ type Props = {
   onChoose?: (index: number) => void
   // Сюда окно кладёт функцию «дописать реплику»; true — клик потрачен на это
   skipRef: RefObject<(() => boolean) | null>
+  // Реплика допечатана
+  onTyped?: () => void
 }
 
-export function DialogBox({ box, speaker, text, choices, cps, onChoose, skipRef }: Props) {
+export function DialogBox({ box, speaker, text, choices, cps, onChoose, skipRef, onTyped }: Props) {
   const { shown, rest, done, skip } = useTypewriter(text, cps)
 
   useEffect(() => {
@@ -25,6 +27,11 @@ export function DialogBox({ box, speaker, text, choices, cps, onChoose, skipRef 
       return true
     }
   }, [done, skip, skipRef])
+
+  useEffect(() => {
+    if (done) onTyped?.()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [done, text])
 
   return (
     <motion.div
