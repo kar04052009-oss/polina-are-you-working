@@ -20,3 +20,6 @@ export const roomImage: string | undefined = Object.values(rooms)[0]
 export function polinaSprite(emotion: string): string | undefined {
   return sprites[`/content/characters/polina/${emotion}.png`]
 }
+
+// Все эмоции подгружаются заранее, чтобы при первой смене выражения лица не было мигания
+for (const url of Object.values(sprites)) new Image().src = url
