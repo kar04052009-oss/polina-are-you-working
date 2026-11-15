@@ -1,4 +1,5 @@
-import { AnimatePresence, motion } from 'motion/react'
+import { useState } from 'react'
+import { motion } from 'motion/react'
 import { layout } from './layout'
 import { polinaSprite } from './assets'
 
@@ -11,34 +12,53 @@ const fadeFrom = box.y + 40 - p.y
 const fadeTo = box.y + box.height - 40 - p.y
 const fadeBottom = `linear-gradient(to bottom, black ${fadeFrom}px, transparent ${fadeTo}px)`
 
+// Временный выбор смены эмоций на черновике: ?emocii=a|b|c. После выбора лишнее уберём.
+// A — наложение 0,35 с; B — медленное наложение 0,6 с; C — наложение 0,35 с и лёгкий «вдох».
+const variant = (['a', 'b', 'c'] as const).find((v) => v === new URLSearchParams(window.location.search).get('emocii')) ?? 'a'
+const FADE = variant === 'b' ? 0.6 : 0.35
+
+const spriteStyle = {
+  position: 'absolute' as const,
+  left: p.x,
+  top: p.y,
+  width: p.width,
+  height: p.height,
+  maskImage: fadeBottom,
+  WebkitMaskImage: fadeBottom,
+}
+
 export function Polina({ emotion = 'neutral' }: { emotion?: string }) {
   const { width: W, height: H } = layout.canvas
   // Если файла нужной эмоции ещё нет — показываем neutral
   const src = polinaSprite(emotion) ?? polinaSprite('neutral')
 
-  if (src) {
+  // Прежнее лицо остаётся непрозрачным под новым, пока новое проявляется, —
+  // так сквозь Полину не просвечивает комната. Потом прежнее убирается.
+  const [layers, setLayers] = useState<{ prev: string | null; cur: string | undefined }>({ prev: null, cur: src })
+  if (src !== layers.cur) setLayers({ prev: layers.cur ?? null, cur: src })
+
+  if (layers.cur) {
     return (
-      // Смена эмоции — быстрое растворение за 0,2 секунды (выбрано на этапе 4)
-      <AnimatePresence initial={false}>
+      <motion.div
+        key={variant === 'c' ? layers.cur : 'polina'}
+        style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
+        // Вариант C: фигура чуть приподнимается и опускается при смене эмоции
+        initial={variant === 'c' && layers.prev ? { y: 0 } : false}
+        animate={variant === 'c' && layers.prev ? { y: [0, -8, 0] } : { y: 0 }}
+        transition={{ duration: 0.45, ease: 'easeInOut' }}
+      >
+        {layers.prev && <img src={layers.prev} alt="" style={spriteStyle} />}
         <motion.img
-          key={src}
-          src={src}
+          key={layers.cur}
+          src={layers.cur}
           alt=""
-          initial={{ opacity: 0 }}
+          style={spriteStyle}
+          initial={layers.prev ? { opacity: 0 } : false}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          style={{
-            position: 'absolute',
-            left: p.x,
-            top: p.y,
-            width: p.width,
-            height: p.height,
-            maskImage: fadeBottom,
-            WebkitMaskImage: fadeBottom,
-          }}
+          transition={{ duration: FADE, ease: 'easeInOut' }}
+          onAnimationComplete={() => setLayers((l) => (l.prev ? { ...l, prev: null } : l))}
         />
-      </AnimatePresence>
+      </motion.div>
     )
   }
 
