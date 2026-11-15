@@ -13,7 +13,8 @@ const box = layout.dialogBox
 const fadePolina = `linear-gradient(to bottom, black ${box.y + 40 - p.y}px, transparent ${box.y + box.height - 40 - p.y}px)`
 
 // Подсветка предмета под курсором. Кладётся под Полину, поэтому то, что за ней, остаётся за ней.
-export function Highlight({ id }: { id: string | null }) {
+// emotion — текущая эмоция: ореол Полины повторяет её силуэт (руки в разных позах разные)
+export function Highlight({ id, emotion = 'neutral' }: { id: string | null; emotion?: string }) {
   return (
     <AnimatePresence>
       {id && (
@@ -25,16 +26,16 @@ export function Highlight({ id }: { id: string | null }) {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.15 }}
         >
-          <Glow id={id} />
+          <Glow id={id} emotion={emotion} />
         </motion.div>
       )}
     </AnimatePresence>
   )
 }
 
-function Glow({ id }: { id: string }) {
-  // Полина — по её собственному силуэту
-  const sprite = id === 'polina' ? polinaSprite('neutral') : undefined
+function Glow({ id, emotion }: { id: string; emotion: string }) {
+  // Полина — по силуэту текущей эмоции
+  const sprite = id === 'polina' ? (polinaSprite(emotion) ?? polinaSprite('neutral')) : undefined
   if (sprite) {
     return (
       <img

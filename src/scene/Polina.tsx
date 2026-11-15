@@ -12,8 +12,12 @@ const fadeFrom = box.y + 40 - p.y
 const fadeTo = box.y + box.height - 40 - p.y
 const fadeBottom = `linear-gradient(to bottom, black ${fadeFrom}px, transparent ${fadeTo}px)`
 
-// Смена эмоции — мягкое наложение за 0,35 с (вариант A, выбран 2026-11-15)
-const FADE = 0.35
+// Смена эмоции — мягкое наложение за 0,35 с (вариант A, выбран 2026-11-15).
+// Новое лицо проявляется за 0,25 с, прежнее с задержкой 0,1 с растворяется за 0,25 с:
+// тело почти не просвечивает, а руки в разных позах перетекают плавно, без «призрака» прежней позы.
+const FADE_IN = 0.25
+const FADE_OUT_DELAY = 0.1
+const FADE_OUT = 0.25
 
 const spriteStyle = {
   position: 'absolute' as const,
@@ -30,15 +34,24 @@ export function Polina({ emotion = 'neutral' }: { emotion?: string }) {
   // Если файла нужной эмоции ещё нет — показываем neutral
   const src = polinaSprite(emotion) ?? polinaSprite('neutral')
 
-  // Прежнее лицо остаётся непрозрачным под новым, пока новое проявляется, —
-  // так сквозь Полину не просвечивает комната. Потом прежнее убирается.
   const [layers, setLayers] = useState<{ prev: string | null; cur: string | undefined }>({ prev: null, cur: src })
   if (src !== layers.cur) setLayers({ prev: layers.cur ?? null, cur: src })
 
   if (layers.cur) {
     return (
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
-        {layers.prev && <img src={layers.prev} alt="" style={spriteStyle} />}
+        {layers.prev && (
+          <motion.img
+            key={layers.prev}
+            src={layers.prev}
+            alt=""
+            style={spriteStyle}
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 0 }}
+            transition={{ duration: FADE_OUT, delay: FADE_OUT_DELAY, ease: 'easeInOut' }}
+            onAnimationComplete={() => setLayers((l) => (l.prev ? { ...l, prev: null } : l))}
+          />
+        )}
         <motion.img
           key={layers.cur}
           src={layers.cur}
@@ -46,8 +59,7 @@ export function Polina({ emotion = 'neutral' }: { emotion?: string }) {
           style={spriteStyle}
           initial={layers.prev ? { opacity: 0 } : false}
           animate={{ opacity: 1 }}
-          transition={{ duration: FADE, ease: 'easeInOut' }}
-          onAnimationComplete={() => setLayers((l) => (l.prev ? { ...l, prev: null } : l))}
+          transition={{ duration: FADE_IN, ease: 'easeOut' }}
         />
       </div>
     )

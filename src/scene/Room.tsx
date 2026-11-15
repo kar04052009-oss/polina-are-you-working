@@ -193,7 +193,7 @@ export function Room() {
         ) : (
           <RoomPlaceholder />
         )}
-        <Highlight id={inRoom ? hovered : null} />
+        <Highlight id={inRoom ? hovered : null} emotion={emotion} />
         <Polina emotion={emotion} />
 
         {/* Предметы для клавиатуры: Tab — по предметам, Enter — нажать. Мышью их не видно и не нажать. */}
