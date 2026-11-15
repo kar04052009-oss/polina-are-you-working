@@ -120,8 +120,11 @@ export function Dialog({ ref, onEmotion, onSection, paused, fromStart, notFound 
     const fromAside = aside !== null
     const after = () => {
       if (answer.next) goTo(answer.next)
-      else if (answer.section) onSection(answer.section)
-      else if (!fromAside) nextLine()
+      else if (answer.section) {
+        // Когда гость вернётся из раздела, разговор продолжится со следующей реплики, а не с этого же вопроса
+        if (!fromAside) nextLine()
+        onSection(answer.section)
+      } else if (!fromAside) nextLine()
     }
     if (answer.reply) {
       // Сначала короткий ответ Полины, потом — дальше по разговору
