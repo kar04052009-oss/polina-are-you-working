@@ -7,7 +7,7 @@ import { RoomPlaceholder } from './RoomPlaceholder'
 import { Polina } from './Polina'
 import { Highlight } from './Highlight'
 import { MarkupOverlay } from './MarkupOverlay'
-import { Pipette, hasMouse } from './Pipette'
+import { Cursor, hasMouse } from './Cursor'
 import { itemAt } from './hitTest'
 import { Dialog, type DialogHandle } from '../dialog/Dialog'
 import { nextVariant } from '../dialog/cycle'
@@ -174,7 +174,7 @@ export function Room() {
 
   return (
     <div
-      className={`room ${hasMouse && inRoom ? 'room--pipette' : ''}`}
+      className={`room ${hasMouse && inRoom ? 'room--cursor' : ''}`}
       onMouseMove={onMove}
       onMouseLeave={() => setHovered(null)}
       style={roomImage ? { background: layout.room.edgeColor } : undefined}
@@ -213,7 +213,7 @@ export function Room() {
           />
         ))}
 
-        {/* Подпись на планшете (на компьютере её показывает пипетка) */}
+        {/* Подпись на планшете (на компьютере её показывает курсор) */}
         {touchItem && inRoom && (
           <div className="room__touch-label" style={{ left: touchItem.x, top: touchItem.y - 70 }}>
             {touchItem.label}
@@ -261,7 +261,7 @@ export function Room() {
       <AnimatePresence>{camera === 'screen' && portfolio && <MonitorDesk rect={screenRect} onClose={closeSection} />}</AnimatePresence>
 
       <Menu onRestart={restart} />
-      {hasMouse && inRoom && <Pipette scale={view.scale} left={view.left} top={view.top} />}
+      {hasMouse && inRoom && <Cursor scale={view.scale} left={view.left} top={view.top} />}
 
       {showMarkup && (
         <div className="room__readout">

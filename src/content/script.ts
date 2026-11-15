@@ -13,7 +13,8 @@ export const EASTER_ITEMS: Record<string, string> = { кот: 'cat', кружк�
 export const REACTIONS = ['долгая тишина', 'снова осмотр', 'много кликов'] as const
 export type Reaction = (typeof REACTIONS)[number]
 
-export type Answer = { text: string; next?: string; section?: Section }
+// reply — короткий ответ Полины на выбор; после него разговор продолжается (или идёт в «дальше»/«раздел»)
+export type Answer = { text: string; next?: string; section?: Section; reply?: string; replyEmotion?: string }
 export type Line =
   | { kind: 'line'; emotion?: string; text: string }
   | { kind: 'question'; emotion?: string; text: string; answers: Answer[] }
@@ -35,7 +36,7 @@ export type Script = {
 export class ScriptError extends Error {}
 
 const LINE_KEYS = ['эмоция', 'текст', 'вопрос', 'ответы']
-const ANSWER_KEYS = ['текст', 'дальше', 'раздел']
+const ANSWER_KEYS = ['текст', 'реплика', 'эмоция', 'дальше', 'раздел']
 const TOP_KEYS = ['начало', 'повторный визит', 'страница не найдена', 'сцены', 'пасхалки', 'перед разделом', 'после раздела', 'реакции']
 
 type Raw = Record<string, unknown>
@@ -94,7 +95,7 @@ export function parseScript(source: string): Script {
         const parsed = answers.flatMap((a, j): Answer[] => {
           const aAt = `${at}, ответ ${j + 1}`
           if (!isObject(a)) {
-            errors.push(`${aAt}: ответ должен содержать «текст:» и «дальше:» или «раздел:».`)
+            errors.push(`${aAt}: ответ должен содержать «текст:» и «реплика:», «дальше:» или «раздел:».`)
             return []
           }
           for (const key of Object.keys(a)) {
@@ -103,14 +104,28 @@ export function parseScript(source: string): Script {
           if (!isText(a['текст'])) errors.push(`${aAt}: нет текста кнопки.`)
           const next = a['дальше']
           const section = a['раздел']
-          if ((next === undefined) === (section === undefined)) {
-            errors.push(`${aAt}: нужно ровно одно — «дальше:» или «раздел:».`)
+          const reply = a['реплика']
+          if (next !== undefined && section !== undefined) {
+            errors.push(`${aAt}: можно что-то одно — «дальше:» или «раздел:».`)
           }
+          if (next === undefined && section === undefined && reply === undefined) {
+            errors.push(`${aAt}: ответу нужно «реплика:», «дальше:» или «раздел:».`)
+          }
+          if (reply !== undefined && !isText(reply)) errors.push(`${aAt}: «реплика:» пустая.`)
+          if (a['эмоция'] !== undefined && reply === undefined) errors.push(`${aAt}: «эмоция:» у ответа относится к «реплика:», а её нет.`)
           if (section !== undefined && !SECTIONS.includes(section as Section)) {
             errors.push(`${aAt}: нет раздела «${section}». Возможные: ${SECTIONS.join(', ')}.`)
           }
           if (next !== undefined) refs.push({ where: `${at}, ответ «${a['текст']}»`, next: String(next) })
-          return [{ text: String(a['текст'] ?? ''), next: next === undefined ? undefined : String(next), section: section as Section | undefined }]
+          return [
+            {
+              text: String(a['текст'] ?? ''),
+              next: next === undefined ? undefined : String(next),
+              section: section as Section | undefined,
+              reply: reply === undefined ? undefined : String(reply),
+              replyEmotion: a['эмоция'] === undefined ? undefined : String(a['эмоция']).trim(),
+            },
+          ]
         })
         return [{ kind: 'question', emotion, text: String(item['вопрос'] ?? ''), answers: parsed }]
       }
@@ -178,5 +193,6 @@ export function parseScript(source: string): Script {
 export function usedEmotions(script: Script): string[] {
   const groups = [script.scenes, script.easter, script.beforeSection, script.afterSection, script.reactions]
   const all = groups.flatMap((g) => Object.values(g)).flat() as Line[]
-  return [...new Set(all.map((l) => l.emotion).filter((e): e is string => !!e))]
+  const fromAnswers = all.flatMap((l) => (l.kind === 'question' ? l.answers.map((a) => a.replyEmotion) : []))
+  return [...new Set([...all.map((l) => l.emotion), ...fromAnswers].filter((e): e is string => !!e))]
 }

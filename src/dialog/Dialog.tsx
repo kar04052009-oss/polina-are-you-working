@@ -85,10 +85,8 @@ export function Dialog({ ref, onEmotion, onSection, paused, fromStart, notFound 
     return () => clearTimeout(t)
   }, [aside, typed, finishAside])
 
-  const advance = useCallback(() => {
-    if (skipRef.current?.()) return
-    if (aside) return finishAside()
-    if (line.kind === 'question') return
+  // Следующая реплика сцены
+  const nextLine = useCallback(() => {
     setInstant(false)
     setPos((p) => {
       const last = p.index >= mainScript.scenes[p.scene].length - 1
@@ -96,20 +94,44 @@ export function Dialog({ ref, onEmotion, onSection, paused, fromStart, notFound 
       // В конце сцены окно остаётся с последней репликой
       return last ? p : { ...p, index: p.index + 1 }
     })
-  }, [aside, finishAside, line.kind, usualStart])
+  }, [usualStart])
+
+  const advance = useCallback(() => {
+    if (skipRef.current?.()) return
+    // На вопрос нужно ответить кнопкой — щелчок мимо ничего не делает
+    if (line.kind === 'question') return
+    if (aside) return finishAside()
+    nextLine()
+  }, [aside, finishAside, line.kind, nextLine])
+
+  // Переход в другую сцену. В уже показанную второй раз не ведём — Полина отвечает реакцией «снова осмотр».
+  const goTo = (scene: string) => {
+    const again = shown.current.has(scene) ? nextVariant('реакции:снова осмотр', mainScript.reactions['снова осмотр']) : null
+    if (again) return startAside({ line: again })
+    setAside(null)
+    setInstant(false)
+    setPos({ scene, index: 0 })
+  }
 
   const choose = (i: number) => {
     if (line.kind !== 'question') return
     const answer = line.answers[i]
-    if (answer.next) {
-      // В уже показанную сцену второй раз не ведём — Полина отвечает реакцией «снова осмотр»
-      const again = shown.current.has(answer.next) ? nextVariant('реакции:снова осмотр', mainScript.reactions['снова осмотр']) : null
-      if (again) startAside({ line: again })
-      else {
-        setInstant(false)
-        setPos({ scene: answer.next, index: 0 })
-      }
-    } else if (answer.section) onSection(answer.section)
+    // Вопрос был отдельной репликой (пасхалка, реакция, «после раздела») — после ответа вернёмся к разговору
+    const fromAside = aside !== null
+    const after = () => {
+      if (answer.next) goTo(answer.next)
+      else if (answer.section) onSection(answer.section)
+      else if (!fromAside) nextLine()
+    }
+    if (answer.reply) {
+      // Сначала короткий ответ Полины, потом — дальше по разговору
+      return startAside({ line: { kind: 'line', emotion: answer.replyEmotion, text: answer.reply }, then: after })
+    }
+    if (fromAside) {
+      setAside(null)
+      setInstant(true)
+    }
+    after()
   }
 
   useEffect(() => {

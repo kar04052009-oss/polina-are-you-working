@@ -1,0 +1,161 @@
+/* Курсор комнаты — в обычных пикселях экрана, поверх всего. Точка курсора — в центре фигуры. */
+
+.room--cursor {
+  cursor: none;
+}
+
+.cursor {
+  position: fixed;
+  z-index: 20;
+  pointer-events: none;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+/* Подпись предмета */
+.cursor__label {
+  position: absolute;
+  left: 20px;
+  top: 12px;
+  padding: 4px 10px;
+  background: var(--ui-bg-solid);
+  color: var(--ui-text);
+  border: 1px solid var(--ui-line-soft);
+  border-radius: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.cursor__label em {
+  font-style: normal;
+  font-weight: 400;
+  color: var(--ui-muted);
+}
+
+/* A. Искра */
+.cursor__spark {
+  position: absolute;
+  left: -13px;
+  top: -13px;
+  fill: #fff;
+  stroke: #1e1e1e;
+  stroke-width: 1.4;
+  animation: cursor-spin 6s linear infinite;
+  transition: transform 0.2s;
+}
+
+.cursor--a.is-over .cursor__spark {
+  scale: 1.35;
+}
+
+@keyframes cursor-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+/* B. Уголки выделения */
+.cursor__corners {
+  --r: 8px;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+/* Над предметом уголки расходятся — предмет «выделяется» */
+.cursor--b.is-over .cursor__corners {
+  --r: 14px;
+}
+
+.cursor__corners i {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border: 0 solid #fff;
+  filter: drop-shadow(0 0 1px #1e1e1e) drop-shadow(0 0 1px #1e1e1e);
+  transition:
+    left 0.18s,
+    top 0.18s;
+}
+
+.cursor__corners i:nth-child(1) {
+  left: calc(-1 * var(--r) - 6px);
+  top: calc(-1 * var(--r) - 6px);
+  border-left-width: 2px;
+  border-top-width: 2px;
+}
+
+.cursor__corners i:nth-child(2) {
+  left: var(--r);
+  top: calc(-1 * var(--r) - 6px);
+  border-right-width: 2px;
+  border-top-width: 2px;
+}
+
+.cursor__corners i:nth-child(3) {
+  left: calc(-1 * var(--r) - 6px);
+  top: var(--r);
+  border-left-width: 2px;
+  border-bottom-width: 2px;
+}
+
+.cursor__corners i:nth-child(4) {
+  left: var(--r);
+  top: var(--r);
+  border-right-width: 2px;
+  border-bottom-width: 2px;
+}
+
+.cursor__corners b {
+  position: absolute;
+  left: -2px;
+  top: -2px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 1px #1e1e1e;
+}
+
+/* C. Кольцо */
+.cursor__ring {
+  position: absolute;
+  left: -11px;
+  top: -11px;
+  width: 22px;
+  height: 22px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 1px rgba(30, 30, 30, 0.7),
+    inset 0 0 0 1px rgba(30, 30, 30, 0.5);
+  transition:
+    left 0.2s,
+    top 0.2s,
+    width 0.2s,
+    height 0.2s,
+    background 0.2s;
+}
+
+.cursor--c.is-over .cursor__ring {
+  left: -20px;
+  top: -20px;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.cursor__ring b {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  margin: -2px 0 0 -2px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.cursor--c.is-over .cursor__label {
+  left: 28px;
+}
