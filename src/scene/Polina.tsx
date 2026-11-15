@@ -12,10 +12,8 @@ const fadeFrom = box.y + 40 - p.y
 const fadeTo = box.y + box.height - 40 - p.y
 const fadeBottom = `linear-gradient(to bottom, black ${fadeFrom}px, transparent ${fadeTo}px)`
 
-// Временный выбор смены эмоций на черновике: ?emocii=a|b|c. После выбора лишнее уберём.
-// A — наложение 0,35 с; B — медленное наложение 0,6 с; C — наложение 0,35 с и лёгкий «вдох».
-const variant = (['a', 'b', 'c'] as const).find((v) => v === new URLSearchParams(window.location.search).get('emocii')) ?? 'a'
-const FADE = variant === 'b' ? 0.6 : 0.35
+// Смена эмоции — мягкое наложение за 0,35 с (вариант A, выбран 2026-11-15)
+const FADE = 0.35
 
 const spriteStyle = {
   position: 'absolute' as const,
@@ -39,14 +37,7 @@ export function Polina({ emotion = 'neutral' }: { emotion?: string }) {
 
   if (layers.cur) {
     return (
-      <motion.div
-        key={variant === 'c' ? layers.cur : 'polina'}
-        style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
-        // Вариант C: фигура чуть приподнимается и опускается при смене эмоции
-        initial={variant === 'c' && layers.prev ? { y: 0 } : false}
-        animate={variant === 'c' && layers.prev ? { y: [0, -8, 0] } : { y: 0 }}
-        transition={{ duration: 0.45, ease: 'easeInOut' }}
-      >
+      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
         {layers.prev && <img src={layers.prev} alt="" style={spriteStyle} />}
         <motion.img
           key={layers.cur}
@@ -58,7 +49,7 @@ export function Polina({ emotion = 'neutral' }: { emotion?: string }) {
           transition={{ duration: FADE, ease: 'easeInOut' }}
           onAnimationComplete={() => setLayers((l) => (l.prev ? { ...l, prev: null } : l))}
         />
-      </motion.div>
+      </div>
     )
   }
 
